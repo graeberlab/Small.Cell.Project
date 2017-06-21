@@ -6,17 +6,17 @@
 #' @param info.name Vector of sample names
 #' @param info.type Vector of sample types in the same order
 #' @param title Title of the plot
-#' @param labels default=T
+#' @param labels default=T, do you want labels
+#' @param label_file Separate file that has annotations you want to use for labeling. Samples should be in a column called "Score". 
+#' @param label_name Name of column you want to use to label points in plot 
 #' @param PCx,PCy PCs to display
 #' @param ellipse Construct confidence region based on groups in info.type, default = T
 #' @param conf default = 0.95 
-#' @param label_file Separate file that has annotations you want to use for labeling. Samples should be in a column called "Score". 
-#' @param label_name Name of column you want to use to label points in plot 
 # @importFrom ggplot2 ggplot aes aes_string element_rect element_text geom_point geom_text labs margin theme theme_bw
 #' 
 #' @export
 #' 
-plot_pca = function(file, info.name, info.type, title = "", labels = TRUE, PCx="PC1", PCy="PC2", label_file=NULL,ellipse = F, conf = 0.95){  
+plot_pca = function(file, info.name, info.type, title = "", labels = TRUE,label_file=NULL,label_name, PCx="PC1", PCy="PC2",ellipse = F, conf = 0.95){  
   #Input: PCA scores file to be ploted
   ##process pca output and adds groupings
   require(ggplot2)
