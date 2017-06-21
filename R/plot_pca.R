@@ -12,11 +12,12 @@
 #' @param PCx,PCy PCs to display
 #' @param ellipse Construct confidence region based on groups in info.type, default = T
 #' @param conf default = 0.95 
+#' @param point_size size of points
 # @importFrom ggplot2 ggplot aes aes_string element_rect element_text geom_point geom_text labs margin theme theme_bw
 #' 
 #' @export
 #' 
-plot_pca = function(file, info.name, info.type, title = "", labels = TRUE,label_file=NULL,label_name, PCx="PC1", PCy="PC2",ellipse = F, conf = 0.95){  
+plot_pca = function(file, info.name, info.type, title = "", labels = TRUE,label_file=NULL,label_name, PCx="PC1", PCy="PC2",ellipse = F, conf = 0.95,point_size=3){  
   #Input: PCA scores file to be ploted
   ##process pca output and adds groupings
   require(ggplot2)
@@ -33,7 +34,7 @@ plot_pca = function(file, info.name, info.type, title = "", labels = TRUE,label_
   rownames(sdev) = paste0("PC",seq(1,nrow(sdev)))
   
   
-  pcx.y <- ggplot(table, aes_string(x=PCx,y=PCy)) +geom_point(size = I(2), aes(color = factor(type))) +
+  pcx.y <- ggplot(table, aes_string(x=PCx,y=PCy)) +geom_point(size = I(point_size), aes(color = factor(type))) +
     theme(legend.position="right",plot.title=element_text(size=30),legend.text=element_text(size=22),
           legend.title=element_text(size=20),axis.title=element_text(size=30),legend.background = element_rect(),
           axis.text.x = element_text(margin = margin(b=-2)),axis.text.y = element_text(margin = margin(l=-14)))+
