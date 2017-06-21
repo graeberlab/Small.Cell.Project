@@ -10,18 +10,22 @@
 #' @param PCx,PCy PCs to display
 #' @param ellipse Construct confidence region based on groups in info.type, default = T
 #' @param conf default = 0.95 
-#' 
+#' @param label_file Separate file that has annotations you want to use for labeling. Samples should be in a column called "Score". 
+#' @param label_name Name of column you want to use to label points in plot 
 # @importFrom ggplot2 ggplot aes aes_string element_rect element_text geom_point geom_text labs margin theme theme_bw
 #' 
 #' @export
 #' 
-plot_pca = function(file, info.name, info.type, title = "", labels = TRUE, PCx="PC1", PCy="PC2", ellipse = F, conf = 0.95){  
+plot_pca = function(file, info.name, info.type, title = "", labels = TRUE, PCx="PC1", PCy="PC2", label_file=NULL,ellipse = F, conf = 0.95){  
   #Input: PCA scores file to be ploted
   ##process pca output and adds groupings
   require(ggplot2)
   require(vegan)
   table <- read.table(file, header = TRUE)
   table$type = info.type[match(table$Score, info.name)]
+  if(!is.null(label_file)) {
+    label_frame=read.delim(label_file)
+    table= left_join(table,label_frame,by="Score")}
   
   sdev = read.delim(paste0(gsub("scores.txt","",file),"sdev.txt"))
   sdev$var = sdev^2
@@ -38,7 +42,8 @@ plot_pca = function(file, info.name, info.type, title = "", labels = TRUE, PCx="
          x = paste0(PCx," (", sdev$pve[match(PCx, rownames(sdev))], "%)"),
          y = paste0(PCy," (", sdev$pve[match(PCy, rownames(sdev))], "%)"))+
     theme_bw()+
-    if(labels==TRUE){geom_text(data = table, mapping = aes(label = Score), check_overlap = TRUE, size = 3)}
+    if(labels==TRUE && is.null(label_file)){geom_text(data = table, mapping = aes(label = Score), check_overlap = TRUE, size = 3)} else if (labels==TRUE && !is.null(label_file))
+      {geom_text(data = table, mapping = aes_string(label = label_name), check_overlap = TRUE, size = 3)}
   
   
   if(ellipse==TRUE){
