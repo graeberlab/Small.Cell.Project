@@ -10,6 +10,10 @@
 #' @param PCx,PCy PCs to display
 #' @param ellipse Construct confidence region based on groups in info.type, default = T
 #' @param conf default = 0.95 
+#' @param saveplot do you want to save the plot
+#' @param savetype default=".pdf", ".png" is also possible
+#' @param w  width default=8
+#' @param h  height default=6
 #' 
 # @importFrom ggplot2 ggplot aes aes_string element_rect element_text geom_point geom_text labs margin theme theme_bw
 #' 
