@@ -119,17 +119,18 @@ PLSR_from_file_and_predict_second_dataset<-function (file, file2, sample.names, 
             axis.title = element_text(size = 30), legend.background = element_rect(), 
             axis.text.x = element_text(margin = margin(b = -2)), 
             axis.text.y = element_text(margin = margin(l = -14))) + 
-      labs(title = title) + theme_bw() 
+      labs(title = title) + theme_bw() +
     if (labels == TRUE) {
       geom_text(data = comb, mapping = aes(label = (rownames(comb))), 
                 check_overlap = TRUE, size = 2.5)
     }
     if(!is.null(shape.palette)){
-      pc.pred3<- pc.pred3 + scale_shape_manual(values=shape.palette)
+      pc.pred3<- pc.pred3 + scale_shape_manual(legendname,values=shape.palette)
     }
     if(!is.null(colpalette)){
       pc.pred3<- pc.pred3 + scale_color_manual(legendname,values=colpalette)
     }
+    
     
     if(saveplot==T){
       ggsave(paste0(savename, "_", comp.x, "_vs_", comp.y, savetype), 
