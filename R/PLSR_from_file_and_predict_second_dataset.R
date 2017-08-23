@@ -23,6 +23,9 @@
 #' @param savetype the type of plot to save,options are ".pdf" or ".png"
 #' @param w is width of plot to be saved
 #' @param h is height of plot to be saved
+#' @param legendname is the legend name
+#' @param plot_both if true plots both training and test set in color
+#' @param colpalette allows you to put in a color palette of form c("#F87660", "#39B600",....etc) to manually assign colors
 #' @export
 #'
 
@@ -42,11 +45,11 @@
 # sample.type2 = info$type
 # train_string = "tofile1"
 PLSR_from_file_and_predict_second_dataset <- function (file, file2, sample.names, sample.type, y.response, 
-          sample.names2 = NULL, sample.type2 = NULL, train_string, 
-          title = "PLSR", comp.x = "comp.1", comp.y = "comp.2", comps = 3, 
-           labels = F,saveplot=F,savename="default",
-          savetype = ".pdf", w = 8, h = 6, 
-          legendname = "default",scale=F) {
+                                                       sample.names2 = NULL, sample.type2 = NULL, train_string, 
+                                                       title = "PLSR", comp.x = "comp.1", comp.y = "comp.2", comps = 3, 
+                                                       labels = F,saveplot=F,savename="default",
+                                                       savetype = ".pdf", w = 8, h = 6, 
+                                                       legendname = "default",scale=F,plot_both=F,colpalette=NULL) {
   require(mixOmics)
   data = read.table(file, sep = "\t", header = T, stringsAsFactors = FALSE, 
                     quote = "")
@@ -106,6 +109,30 @@ PLSR_from_file_and_predict_second_dataset <- function (file, file2, sample.names
                 check_overlap = TRUE, size = 2.3)
     }
   pc.pred
+  if(plot_both==T ){
+    comb=rbind(prediction,x.variates)
+    pc.pred3 = ggplot(data = comb, aes_string(x = comp.x, 
+                                                   y = comp.y),) + geom_point(size = I(3), aes(color = factor(type))) + 
+      theme(legend.position = "right", plot.title = element_text(size = 30), 
+            legend.text = element_text(size = 22), legend.title = element_text(size = 20), 
+            axis.title = element_text(size = 30), legend.background = element_rect(), 
+            axis.text.x = element_text(margin = margin(b = -2)), 
+            axis.text.y = element_text(margin = margin(l = -14))) + 
+      labs(title = title) + theme_bw() +
+      if (labels == TRUE) {
+        geom_text(data = comb, mapping = aes(label = (rownames(comb))), 
+                  check_overlap = TRUE, size = 2.5)
+      }
+    if(!is.null(colpalette)){
+      pc.pred3<- pc.pred3 + scale_color_manual(legendname,values=colpalette)
+    }
+    if(saveplot==T){
+      ggsave(paste0(savename, "_", comp.x, "_vs_", comp.y, savetype), 
+             dpi = 300, plot = pc.pred3, width = w, height = h)
+    }
+   pc.pred3
+  } else{
+  
   pc.pred = pc.pred + geom_point(data = x.variates, aes_string(x = comp.x, 
                                                                y = comp.y)) + geom_point(size = I(1.3), aes(color = factor(type))) + 
     theme(legend.position = "right", plot.title = element_text(size = 30), 
@@ -115,8 +142,9 @@ PLSR_from_file_and_predict_second_dataset <- function (file, file2, sample.names
           axis.text.y = element_text(margin = margin(l = -14))) + 
     labs(title = title) + theme_bw()
   if(saveplot==T){
-  ggsave(paste0(savename, "_", comp.x, "_vs_", comp.y, savetype), 
-         dpi = 300, plot = pc.pred, width = w, height = h)
+    ggsave(paste0(savename, "_", comp.x, "_vs_", comp.y, savetype), 
+           dpi = 300, plot = pc.pred, width = w, height = h)
   }
   pc.pred
+  }
 }
