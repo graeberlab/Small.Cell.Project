@@ -85,7 +85,7 @@ PLSR_from_file_and_predict_second_dataset<-function (file, file2, sample.names, 
     #rot.load = cbind(Loading = x.loadings[,1], rot.load)
     
     
-    scores <- scale(x.variates[,1:(varimax.comp)]) %*% rotation$rotmat
+    scores <- as.matrix(x.variates[,1:(varimax.comp)]) %*% rotation$rotmat
     scores = as.data.frame(scores)
     colnames(scores)=colnames(x.variates)
     x.variates=scores
@@ -123,7 +123,7 @@ PLSR_from_file_and_predict_second_dataset<-function (file, file2, sample.names, 
   
   
   if(varimax==T){
-    predit <- scale(prediction[,1:(varimax.comp)]) %*% rotation$rotmat
+    predit <- as.matrix(prediction[,1:(varimax.comp)]) %*% rotation$rotmat
     colnames(predit)=colnames(prediction)
     prediction=as.data.frame(predit)
     
