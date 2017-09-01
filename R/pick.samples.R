@@ -9,9 +9,8 @@
 #' @param train.method the method used for training, default is leave one out cross validation, check caret for options
 #' @param technique the method used for model building, default is linear discriminant analysis, check caret for options (e.g. svmLinear,
 #' @importFrom utils read.delim read.table write.table
+#'
 #' @export
-#' 
-
 
 pick.samples<-function(data.file,max.features=5,anno.file,train.method="LOOCV",technique="lda"){
   require(caret)
