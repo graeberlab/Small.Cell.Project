@@ -40,7 +40,7 @@ pick.samples<-function(data.file,max.features=5,anno.file,train.method="LOOCV",t
     print(paste0("Using ",i," features we have ",accuracy," Accuracy"))
   }
   features=find.simplest.model.with.best.accuracy(accuracy_vect)
-  data=data[,1:features]
+  data.temp=data[,1:features]
   data.temp$type=anno[match(rownames(data.temp),anno[,1]),2]
   model<- train(type~., data=data.temp, trControl=train_control, method="lda")
   accuracy=as.numeric(model$results[2])
