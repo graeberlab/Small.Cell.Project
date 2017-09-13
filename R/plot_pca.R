@@ -23,7 +23,7 @@
 #' 
 plot_pca = function (file, info.name, info.type, title = "", labels = TRUE, 
           label_file = NULL, label_name, PCx = "PC1", PCy = "PC2", 
-          ellipse = F, conf = 0.95, point_size = 3,savename="example",saveplot=F,savetype=".pdf",w=8,h=6) {
+          ellipse = F, conf = 0.95, point_size = 3,savename="example",saveplot=F,savetype=".pdf",w=8,h=6,label_size=3) {
   require(ggplot2)
   require(vegan)
   table <- read.table(file, header = TRUE)
@@ -52,7 +52,7 @@ plot_pca = function (file, info.name, info.type, title = "", labels = TRUE,
                                                                                                                }
   else if (labels == TRUE && !is.null(label_file)) {
     geom_text(data = table, mapping = aes_string(label = label_name), 
-              check_overlap = TRUE, size = 3)
+              check_overlap = TRUE, size = label_size)
   }
   if (ellipse == TRUE) {
     plot(table[, c(PCx, PCy)], main = title)
