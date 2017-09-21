@@ -1,8 +1,8 @@
-Package: ksheu.lib
-Title: KSheu Lib
+Package: small.cell.project
+Title: small.cell.project
 Version: 0.0.0.9000
-Authors@R: person("Katherine", "Sheu", email = "first.last@example.com", role = c("aut", "cre"))
-Description: Useful functions.
+Authors@R: person("Niko", "B", email = "nbalanis@mednet.ucla.edu, role = c("aut", "cre"))
+Description: Useful functions. Some come from ksheu.lib github.
 Depends:
     R (>= 3.3.2)
 License: What license is it under?

@@ -1,2 +1,2 @@
-# ksheu.lib
+# small.cell.project
 Useful functions
