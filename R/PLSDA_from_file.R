@@ -7,13 +7,14 @@
 #' @param response.values Vector of response values in same order matching sample.names
 #' @param comp number of components to compute
 #' @param scale default=T
+
+#' @importFrom mixOmics plsda plotIndiv
 #' 
 #' @export
 #'
 
 
 PLSDA_from_file = function(file, sample.names, response.values, comps = 2, scale = F, ind.names = F){
-  require(mixOmics)
   require(dummies)
   data = read.table(file, sep='\t',header=T,stringsAsFactors=FALSE, quote = "")
   data = data[rowSums((data[, -1] == 0)) < ncol(data[-1]), ] #remove genes with no variance

@@ -12,6 +12,8 @@
 #' @param file2 file for test data matrix
 #' @param sample.names2 Vector of sample names in 2nd dataset, if needed
 #' @param response.values Vector of response values in same order matching sample.names2, if available
+
+#' @importFrom mixOmics plsda plotIndiv
 #' 
 #' @export
 #'

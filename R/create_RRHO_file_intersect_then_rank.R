@@ -1,3 +1,14 @@
+#' create RRHO file after intersecting
+#' 
+
+#' @param metric_file1 filepath of first metric file. usually 2 columns. should have no headers. first column is gene name. second column is metric. does not need to be sorted
+#' @param metric_file2 filepath of second metric file. usually 2 columns. should have no headers. first column is gene name. second column is metric. does not need to be sorted
+#' @param outfile_prefix prefix of the output file
+#' @param metric.col.file1 # of the column that metric data is in for file 1
+#' @param metric.col.file2 # of the column that metric data is in for file 2
+#' 
+#' @export
+#' 
 
 create_RRHO_file_intersect_then_rank<-function(metric_file1,metric_file2,outfile.prefix=paste0("rankrank.",metric_file1,"_vs_",metric_file2),metric.col.file1=2,metric.col.file2=2,rank1="desc",rank2="desc") {
   
