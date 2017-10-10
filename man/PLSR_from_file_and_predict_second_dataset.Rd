@@ -6,11 +6,12 @@
 \usage{
 PLSR_from_file_and_predict_second_dataset(file, file2, sample.names,
   sample.type, y.response, sample.names2 = NULL, sample.type2 = NULL,
-  train_string, title = "PLSR", comp.x = "comp.1", comp.y = "comp.2",
-  comps = 2, labels = F, saveplot = F, savename = "default",
-  savetype = ".pdf", w = 8, h = 6, legendname = "default", scale = F,
-  plot_both = F, colpalette = NULL, shape.palette = NULL, ellipses = T,
-  conf = 0.9, varimax = F, varimax.comp = 2)
+  train_string, test_string, title = "PLSR", comp.x = "comp.1",
+  comp.y = "comp.2", comps = 2, labels = F, saveplot = T,
+  savename = "default", savetype = ".png", w = 8, h = 6,
+  legendname = "default", scale = F, plot_both = F, colpalette = NULL,
+  shape.palette = NULL, ellipses = T, conf = 0.9, varimax = F,
+  varimax.comp = 2)
 }
 \arguments{
 \item{file}{file for X matirx}
@@ -27,7 +28,9 @@ PLSR_from_file_and_predict_second_dataset(file, file2, sample.names,
 
 \item{sample.type2}{Vector of sample types in 2nd dataset, if needed}
 
-\item{train_string}{string to insert in file name of predicted scores}
+\item{train_string}{string of training data to insert in file name of predicted scores}
+
+\item{test_string}{string of data being tested to insert in file name of predicted scores}
 
 \item{title}{title of the plot}
 

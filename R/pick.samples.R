@@ -3,6 +3,7 @@
 #' Reads file with features(PC's) in columns and samples in rows. And an annotation file.You pick a max # of features. Using caret
 #' runs a prediction iteratively from 2 to max.features. Picks best predictor with least featurs. Returns samples correctly predicted
 #' leaves out those samples incorrectly predicted.
+#' 
 #' @param data.file Filepath/filename of data matrix
 #' @param max.features the maximum number of features to use
 #' @param anno.file annotation file, has headers, first column is sample names, 2nd is type

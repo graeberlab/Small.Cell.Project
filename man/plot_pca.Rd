@@ -7,7 +7,7 @@
 plot_pca(file, info.name, info.type, title = "", labels = TRUE,
   label_file = NULL, label_name, PCx = "PC1", PCy = "PC2", ellipse = F,
   conf = 0.95, point_size = 3, savename = "example", saveplot = F,
-  savetype = ".pdf", w = 8, h = 6, label_size = 3)
+  savetype = ".png", w = 8, h = 6, label_size = 3)
 }
 \arguments{
 \item{file}{File containing scores matrix}

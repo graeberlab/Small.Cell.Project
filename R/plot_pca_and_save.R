@@ -16,13 +16,6 @@
 #' 
 #' @export
 
-
-# a.scores=PCA score data.frame with column annotations
-# aes_fill= column header to color samples by
-# savename= prefix to save file by
-# label= column name to label samples by on PCA plot, false if no label
-# Function
-
 plot_pca_and_save=function(scores.file, info.name, info.type, PCx="PC1",PCy="PC2", factor.levels = levels(info.type),aes_fill=NULL,savename,savePlot=F,width=6,height=2,title = "",label=F,savetype=".pdf",w=6,h=3,aspect.ratio=0.8,legend=F,legendname="default",colors=colpalette[1:4],psize=2.0,plotLabelname="none") {
   #plot graph
   require(ggplot2)
