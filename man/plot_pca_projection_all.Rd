@@ -6,7 +6,7 @@
 \usage{
 plot_pca_projection_all(file, rotated.file, info.name, info.type, info.name2,
   info.type2, title = "Projection", labels = F, PCx = "PC1",
-  PCy = "PC2")
+  PCy = "PC2", colpalette = NULL, legendname = "default")
 }
 \arguments{
 \item{file}{scores file of original data}
@@ -26,8 +26,9 @@ plot_pca_projection_all(file, rotated.file, info.name, info.type, info.name2,
 \item{labels}{default=T}
 
 \item{PCx, PCy}{PCs to display}
+
+\item{colpalette}{allows you to use a manual color palette using vector of form c('red','blue"....etc)}
 }
 \description{
 Plots projection from rotated.scores file (output of intersect_do_PCA_and_project_second_dataset) on top of original data
 }
-

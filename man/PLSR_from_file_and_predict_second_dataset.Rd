@@ -7,7 +7,10 @@
 PLSR_from_file_and_predict_second_dataset(file, file2, sample.names,
   sample.type, y.response, sample.names2 = NULL, sample.type2 = NULL,
   train_string, title = "PLSR", comp.x = "comp.1", comp.y = "comp.2",
-  comps = 3, scale = F, labels = F)
+  comps = 2, labels = F, saveplot = F, savename = "default",
+  savetype = ".pdf", w = 8, h = 6, legendname = "default", scale = F,
+  plot_both = F, colpalette = NULL, shape.palette = NULL, ellipses = T,
+  conf = 0.9, varimax = F, varimax.comp = 2)
 }
 \arguments{
 \item{file}{file for X matirx}
@@ -30,9 +33,31 @@ PLSR_from_file_and_predict_second_dataset(file, file2, sample.names,
 
 \item{comp.x, comp.y}{comps to display}
 
+\item{labels}{label the plot, default = T}
+
+\item{saveplot}{whether to save the plot, default is F}
+
+\item{savename}{the name to save plot under}
+
+\item{savetype}{the type of plot to save,options are ".pdf" or ".png"}
+
+\item{w}{is width of plot to be saved}
+
+\item{h}{is height of plot to be saved}
+
+\item{legendname}{is the legend name}
+
 \item{scale}{default=T}
 
-\item{labels}{label the plot, default = T}
+\item{plot_both}{if true plots both training and test set in color}
+
+\item{colpalette}{allows you to put in a color palette of form c("#F87660", "#39B600",....etc) to manually assign colors}
+
+\item{shape.palette}{allows you to put in a shape palette of form c(1, 3,....etc) to manually assign shapes}
+
+\item{varimax}{If T performs Varimax rotation,}
+
+\item{varimax.comp}{# of varimax components, kind of hacky, keep this # the same as # of comps. Will fix later.}
 
 \item{comp}{number of components to compute}
 }
@@ -41,4 +66,3 @@ Builds PLS model from training dataset and predicts second dataset
 Writes out predicted.scores of the second dataset
 Plots original PLS, projected samples only, and projected samples ontop of original PLS
 }
-

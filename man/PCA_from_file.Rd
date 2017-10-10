@@ -16,4 +16,3 @@ PCA_from_file(file, center = TRUE, scale = FALSE)
 \description{
 Reads file with samples in columns and variables in rows, and does PCA. Writes to file scores, loadings, eigenvalues.
 }
-

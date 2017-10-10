@@ -21,4 +21,3 @@ PLSDA_from_file(file, sample.names, response.values, comps = 2, scale = F,
 \description{
 Writes out loadings
 }
-

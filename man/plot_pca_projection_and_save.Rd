@@ -41,4 +41,3 @@ plot_pca_projection_and_save(scores.file, info.name, info.type, PCx = "PC1",
 \description{
 Plot PCA projection with save option
 }
-

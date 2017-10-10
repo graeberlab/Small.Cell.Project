@@ -1,4 +1,12 @@
-
+#' create log tcga files
+#' 
+#' Takes upper norm tcga files creates processed form with coding genes and normal samples only. Goes through all cancers that have upper_norm normalized RNAseq stored on data2 and selects normal files 
+#' then removes cancers, log2 x+1 transforms, and restricts to coding genes. Then prints out a file for each.
+#' 
+# @importFrom ggplot2 ggplot aes aes_string element_rect element_text geom_point geom_text labs margin theme theme_bw
+#' 
+#' @export
+#' 
 create_log_tcga_files_normal=function() {
   log2_it=function(data){
     gene=data[,1]

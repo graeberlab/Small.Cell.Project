@@ -5,7 +5,9 @@
 \title{Plot PLS}
 \usage{
 plot_pls(file, info.name, info.type, title = "", labels = TRUE,
-  PCx = "comp.1", PCy = "comp.2", ellipse = F, conf = 0.95)
+  PCx = "comp.1", PCy = "comp.2", ellipse = F, conf = 0.95,
+  saveplot = F, savename = "default", savetype = ".pdf", w = 8, h = 6,
+  legendname = "type", colpalette = NULL)
 }
 \arguments{
 \item{file}{File containing scores matrix}
@@ -23,8 +25,19 @@ plot_pls(file, info.name, info.type, title = "", labels = TRUE,
 \item{ellipse}{Construct confidence region based on groups in info.type, default = T}
 
 \item{conf}{default = 0.95}
+
+\item{saveplot}{do you want to save the plot}
+
+\item{savetype}{default=".pdf", ".png" is also possible}
+
+\item{w}{width default=8}
+
+\item{h}{height default=6}
+
+\item{h}{colpalette can add your own vector of colors to color groups. default is ggplot default colors}
+
+\item{h}{legendname legend name}
 }
 \description{
 Plots PLS from scores file (output of PLSR_from_file)
 }
-

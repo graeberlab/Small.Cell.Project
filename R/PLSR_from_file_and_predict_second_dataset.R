@@ -17,7 +17,8 @@
 #' @param file2 file for test data matrix
 #' @param sample.names2 Vector of sample names in 2nd dataset, if needed
 #' @param sample.type2 Vector of sample types in 2nd dataset, if needed
-#' @param train_string string to insert in file name of predicted scores
+#' @param train_string string of training data to insert in file name of predicted scores
+#' @param test_string string of data being tested to insert in file name of predicted scores
 #' @param saveplot whether to save the plot, default is F
 #' @param savename the name to save plot under
 #' @param savetype the type of plot to save,options are ".pdf" or ".png"
@@ -29,29 +30,15 @@
 #' @param shape.palette allows you to put in a shape palette of form c(1, 3,....etc) to manually assign shapes
 #' @param varimax If T performs Varimax rotation, 
 #' @param varimax.comp # of varimax components, kind of hacky, keep this # the same as # of comps. Will fix later.
+#'
+#' @importFrom mixOmics pls
 #' @export
 #'
-
-#sample input
-# file = "filename.txt"
-# sample.names = info$sample
-# sample.type = info$type
-# y.response = ifelse(info$type=="TYPE", 1, 0)
-# scale = F
-# labels = T
-# comps = 3
-# comp.x = "comp.1"
-# comp.y = "comp.2"
-# title = "Title"
-# #file2 = "filename2.txt"
-# sample.names2 = info$sample
-# sample.type2 = info$type
-# train_string = "tofile1"
 PLSR_from_file_and_predict_second_dataset<-function (file, file2, sample.names, sample.type, y.response, 
-                                                     sample.names2 = NULL, sample.type2 = NULL, train_string, 
+                                                     sample.names2 = NULL, sample.type2 = NULL, train_string, test_string, 
                                                      title = "PLSR", comp.x = "comp.1", comp.y = "comp.2", comps = 2, 
-                                                     labels = F,saveplot=F,savename="default",
-                                                     savetype = ".pdf", w = 8, h = 6, legendname = "default",scale=F,
+                                                     labels = F,saveplot=T,savename="default",
+                                                     savetype = ".png", w = 8, h = 6, legendname = "default",scale=F,
                                                      plot_both=F,colpalette=NULL,shape.palette=NULL,ellipses=T,conf=0.9,
                                                      varimax=F,varimax.comp=2) {
   require(mixOmics)
@@ -186,9 +173,11 @@ PLSR_from_file_and_predict_second_dataset<-function (file, file2, sample.names, 
             axis.text.y = element_text(margin = margin(l = -14))) + 
       labs(title = title) + theme_bw()
     if(saveplot==T){
-      ggsave(paste0(savename, "_", comp.x, "_vs_", comp.y, savetype), 
+      ggsave(paste0(test_string,"_projected_onto_",train_string,"_", comp.x, "_vs_", comp.y, savetype), 
              dpi = 300, plot = pc.pred, width = w, height = h)
     }
     pc.pred
   }
 }
+
+

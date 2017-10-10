@@ -1,3 +1,12 @@
+#' create log tcga files
+#' 
+#' Takes upper norm tcga files creates processed form with coding genes and cancer samples only. Goes through all cancers that have upper_norm normalized RNAseq stored on data2 
+#' then removes normals, log2 x+1 transforms, and restricts to coding genes. Then prints out a file for each.
+#' 
+# @importFrom ggplot2 ggplot aes aes_string element_rect element_text geom_point geom_text labs margin theme theme_bw
+#' 
+#' @export
+#' 
 create_log_tcga_files=function() {
   log2_it=function(data){
     gene=data[,1]
@@ -6,7 +15,7 @@ create_log_tcga_files=function() {
     return(dat)
   }
   
-  coding = read.delim("protein-coding_gene.txt")
+  coding = read.delim("//10.47.223.100/data2/users/nbalanis/SmallCell/Annotation/protein-coding_gene.txt")
   all.files.short.path=list.files("//10.47.223.100/data2/users/nbalanis/Input_Files_and_Standards/TCGA_TOIL_RECOMPUTE/TOIL_TCGA_norm",pattern="_norm.txt",full.names=F)
   all.names=as.character(sapply(all.files.short.path, function(x) strsplit(x,"_")[[1]][3]))
   for(name in all.names){

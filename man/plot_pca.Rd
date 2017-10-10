@@ -5,7 +5,9 @@
 \title{Plot PCA}
 \usage{
 plot_pca(file, info.name, info.type, title = "", labels = TRUE,
-  PCx = "PC1", PCy = "PC2", ellipse = F, conf = 0.95)
+  label_file = NULL, label_name, PCx = "PC1", PCy = "PC2", ellipse = F,
+  conf = 0.95, point_size = 3, savename = "example", saveplot = F,
+  savetype = ".pdf", w = 8, h = 6, label_size = 3)
 }
 \arguments{
 \item{file}{File containing scores matrix}
@@ -16,15 +18,28 @@ plot_pca(file, info.name, info.type, title = "", labels = TRUE,
 
 \item{title}{Title of the plot}
 
-\item{labels}{default=T}
+\item{labels}{default=T, do you want labels}
+
+\item{label_file}{Separate file that has annotations you want to use for labeling. Samples should be in a column called "Score".}
+
+\item{label_name}{Name of column you want to use to label points in plot}
 
 \item{PCx, PCy}{PCs to display}
 
 \item{ellipse}{Construct confidence region based on groups in info.type, default = T}
 
 \item{conf}{default = 0.95}
+
+\item{point_size}{size of points}
+
+\item{saveplot}{do you want to save the plot}
+
+\item{savetype}{default=".pdf", ".png" is also possible}
+
+\item{w}{width default=8}
+
+\item{h}{height default=6}
 }
 \description{
 Plots PCA from scores file (output of PCA_from_file)
 }
-

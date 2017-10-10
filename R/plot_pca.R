@@ -18,12 +18,13 @@
 #' @param w  width default=8
 #' @param h  height default=6
 # @importFrom ggplot2 ggplot aes aes_string element_rect element_text geom_point geom_text labs margin theme theme_bw
+# @importFrom ggrepel geom_text_repel
 #' 
 #' @export
 #' 
 plot_pca = function (file, info.name, info.type, title = "", labels = TRUE, 
           label_file = NULL, label_name, PCx = "PC1", PCy = "PC2", 
-          ellipse = F, conf = 0.95, point_size = 3,savename="example",saveplot=F,savetype=".pdf",w=8,h=6,label_size=3) {
+          ellipse = F, conf = 0.95, point_size = 3,savename="example",saveplot=F,savetype=".png",w=8,h=6,label_size=3) {
   require(ggplot2)
   require(vegan)
   table <- read.table(file, header = TRUE)
@@ -47,8 +48,8 @@ plot_pca = function (file, info.name, info.type, title = "", labels = TRUE,
                                                                    "%)"), y = paste0(PCy, " (", sdev$pve[match(PCy, 
                                                                                                                rownames(sdev))], "%)")) + theme_bw() + if (labels == 
                                                                                                                                                            TRUE && is.null(label_file)) {
-                                                                                                                 geom_text(data = table, mapping = aes(label = Score), 
-                                                                                                                           check_overlap = TRUE, size = 3)
+                                                                                                                 geom_text_repel(data = table, mapping = aes(label = Score), 
+                                                                                                                           check_overlap = TRUE, size = label_size)
                                                                                                                }
   else if (labels == TRUE && !is.null(label_file)) {
     geom_text(data = table, mapping = aes_string(label = label_name), 
