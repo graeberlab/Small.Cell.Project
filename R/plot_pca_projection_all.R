@@ -21,7 +21,7 @@
 
  plot_pca_projection_all<-function (file, rotated.file, info.name, info.type, info.name2, 
           info.type2, title = "Projection", labels = F, PCx = "PC1", 
-          PCy = "PC2",colpalette=NULL,legendname="default") 
+          PCy = "PC2",colpalette=NULL,legendname="default",ellipses=T,conf=0.9) 
 {
   require(ggplot2)
   pc.scores = read.table(file, header = TRUE, row.names = 1)
@@ -50,5 +50,12 @@
       geom_text(mapping = aes(label = rownames(combined.data)), 
                 check_overlap = TRUE, size = 3)
     }
+  if(ellipses==T){
+    pcx.y<- pcx.y + stat_ellipse(aes(color=factor(type)),level=conf)
+  }
+  if(!is.null(colpalette)){
+    pcx.y<- pcx.y + scale_color_manual(legendname,values=colpalette)
+  }
+  
   pcx.y
 }

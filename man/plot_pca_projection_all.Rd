@@ -6,7 +6,8 @@
 \usage{
 plot_pca_projection_all(file, rotated.file, info.name, info.type, info.name2,
   info.type2, title = "Projection", labels = F, PCx = "PC1",
-  PCy = "PC2", colpalette = NULL, legendname = "default")
+  PCy = "PC2", colpalette = NULL, legendname = "default", ellipses = T,
+  conf = 0.9)
 }
 \arguments{
 \item{file}{scores file of original data}
