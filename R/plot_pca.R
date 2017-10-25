@@ -59,8 +59,8 @@ plot_pca = function (file, info.name, info.type, title = "", labels = TRUE,
     pcx.y<- pcx.y + stat_ellipse(aes(color=factor(type)),level=conf)
     if (saveplot == T) {
       ggsave(paste0(savename, "_", PCx, "_vs_", PCy, savetype), 
-             dpi = 300, plot = pcx.y2, width = w, height = h)
-    pcx.y2} else {pcx.y2}
+             dpi = 300, plot = pcx.y, width = w, height = h)
+    pcx.y} else {pcx.y}
   }else {
     if (saveplot == T) {
       ggsave(paste0(savename, "_", PCx, "_vs_", PCy, savetype), 

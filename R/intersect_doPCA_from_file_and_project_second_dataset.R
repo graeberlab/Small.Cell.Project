@@ -60,13 +60,15 @@ intersect_doPCA_from_file_and_project_second_dataset=function(file,file2,train_s
   
   rotated.data2 = scale(t.data2, pca$center, pca$scale) %*% pca$rotation 
 
-  rotated.data2=cbind("Sample"=rownames(rotated.data2),rotated.data2)
+  rotated.data2=cbind("Score"=rownames(rotated.data2),rotated.data2)
   
   #save data
   name2=sub(".txt","",file2)
   savename_intermed=paste(name2,train_string,sep='_');
   savename2=paste(savename_intermed,"_prcomp_rotated.txt",sep='');
   write.table(rotated.data2,savename2,sep='\t',row.names=FALSE,quote=FALSE);
+  savename2=paste(savename_intermed,"_prcomp_sdev.txt",sep='');
+  write.table(pca_evalues,savename2,sep='\t',row.names=FALSE,quote=FALSE);
   
   rotated.data2
   

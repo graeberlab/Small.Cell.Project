@@ -5,7 +5,7 @@
 \title{Plot PCA}
 \usage{
 plot_pca(file, info.name, info.type, title = "", labels = TRUE,
-  label_file = NULL, label_name, PCx = "PC1", PCy = "PC2", ellipse = F,
+  label_file = NULL, label_name, PCx = "PC1", PCy = "PC2", ellipses = F,
   conf = 0.95, point_size = 3, savename = "example", saveplot = F,
   savetype = ".png", w = 8, h = 6, label_size = 3)
 }
@@ -26,7 +26,7 @@ plot_pca(file, info.name, info.type, title = "", labels = TRUE,
 
 \item{PCx, PCy}{PCs to display}
 
-\item{ellipse}{Construct confidence region based on groups in info.type, default = T}
+\item{ellipses}{Construct confidence region based on groups in info.type, default = T}
 
 \item{conf}{default = 0.95}
 
