@@ -21,15 +21,15 @@
 
  plot_pca_projection_all<-function (file, rotated.file, info.name, info.type, info.name2, 
           info.type2, title = "Projection", labels = F, PCx = "PC1", 
-          PCy = "PC2",colpalette=NULL,legendname="default",ellipses=T,conf=0.9) 
+          PCy = "PC2",colpalette=NULL,legendname="default",ellipses=T,conf=0.9,pcs=2) 
 {
   require(ggplot2)
   pc.scores = read.table(file, header = TRUE, row.names = 1)
-  pc.scores.reduced = pc.scores[, 1:5]
+  pc.scores.reduced = pc.scores[, 1:pcs]
   pc.scores.reduced$type = info.type[match(rownames(pc.scores.reduced), 
                                            info.name)]
   projected_data = read.table(rotated.file, header = T, row.names = 1)
-  projected_data.reduced = projected_data[, 1:5]
+  projected_data.reduced = projected_data[, 1:pcs]
   projected_data.reduced$type = info.type2[match(rownames(projected_data.reduced), 
                                                  info.name2)]
   combined.data = rbind(pc.scores.reduced, projected_data.reduced)

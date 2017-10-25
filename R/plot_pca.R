@@ -10,7 +10,7 @@
 #' @param label_file Separate file that has annotations you want to use for labeling. Samples should be in a column called "Score". 
 #' @param label_name Name of column you want to use to label points in plot 
 #' @param PCx,PCy PCs to display
-#' @param ellipse Construct confidence region based on groups in info.type, default = T
+#' @param ellipses Construct confidence region based on groups in info.type, default = T
 #' @param conf default = 0.95 
 #' @param point_size size of points
 #' @param saveplot do you want to save the plot
@@ -24,7 +24,7 @@
 #' 
 plot_pca = function (file, info.name, info.type, title = "", labels = TRUE, 
           label_file = NULL, label_name, PCx = "PC1", PCy = "PC2", 
-          ellipse = F, conf = 0.95, point_size = 3,savename="example",saveplot=F,savetype=".png",w=8,h=6,label_size=3) {
+          ellipses = F, conf = 0.95, point_size = 3,savename="example",saveplot=F,savetype=".png",w=8,h=6,label_size=3) {
   require(ggplot2)
   require(vegan)
   table <- read.table(file, header = TRUE)
@@ -55,25 +55,8 @@ plot_pca = function (file, info.name, info.type, title = "", labels = TRUE,
     geom_text(data = table, mapping = aes_string(label = label_name), 
               check_overlap = TRUE, size = label_size)
   }
-  if (ellipse == TRUE) {
-    plot(table[, c(PCx, PCy)], main = title)
-    ord = ordiellipse(table[, c(PCx, PCy)], table$type, kind = "sd", 
-                      conf = conf)
-    cov_ellipse <- function(cov, center = c(0, 0), scale = 1, 
-                            npoints = 100) {
-      theta <- (0:npoints) * 2 * pi/npoints
-      Circle <- cbind(cos(theta), sin(theta))
-      t(center + scale * t(Circle %*% chol(cov)))
-    }
-    df_ell <- data.frame(matrix(ncol = 0, nrow = 0))
-    for (g in (droplevels(as.factor(table$type)))) {
-      df_ell <- rbind(df_ell, cbind(as.data.frame(with(table[table$type == 
-                                                               g, ], cov_ellipse(ord[[g]]$cov, ord[[g]]$center, 
-                                                                                 ord[[g]]$scale))), type = g))
-    }
-    pcx.y2 = pcx.y + geom_path(data = df_ell, aes(x = df_ell[, 
-                                                             PCx], y = df_ell[, PCy], colour = type), size = 1, 
-                               linetype = 1)
+  if (ellipses == TRUE) {
+    pcx.y<- pcx.y + stat_ellipse(aes(color=factor(type)),level=conf)
     if (saveplot == T) {
       ggsave(paste0(savename, "_", PCx, "_vs_", PCy, savetype), 
              dpi = 300, plot = pcx.y2, width = w, height = h)
