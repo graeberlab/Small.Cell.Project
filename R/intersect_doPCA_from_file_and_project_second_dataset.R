@@ -65,9 +65,9 @@ intersect_doPCA_from_file_and_project_second_dataset=function(file,file2,train_s
   #save data
   name2=sub(".txt","",file2)
   savename_intermed=paste(name2,train_string,sep='_');
-  savename2=paste(savename_intermed,"_prcomp_rotated.txt",sep='');
+  savename2=paste(savename_intermed,"_prcomp_rotated_scores.txt",sep='');
   write.table(rotated.data2,savename2,sep='\t',row.names=FALSE,quote=FALSE);
-  savename2=paste(savename_intermed,"_prcomp_sdev.txt",sep='');
+  savename2=paste(savename_intermed,"_prcomp_rotated_sdev.txt",sep='');
   write.table(pca_evalues,savename2,sep='\t',row.names=FALSE,quote=FALSE);
   
   rotated.data2
