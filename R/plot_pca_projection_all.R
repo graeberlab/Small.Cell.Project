@@ -33,7 +33,7 @@
   projected_data.reduced$type = info.type2[match(rownames(projected_data.reduced), 
                                                  info.name2)]
   combined.data = rbind(pc.scores.reduced, projected_data.reduced)
-  colnames(combined.data)[6] <- "type"
+  colnames(combined.data)[pcs+1] <- "type"
   pcx.y <- ggplot(combined.data, aes_string(x = PCx, y = PCy)) + 
     geom_point(size = I(2), aes(color = factor(type))) + 
     theme(legend.position = "right", plot.title = element_text(size = 30), 
