@@ -17,8 +17,8 @@
 #' @param savetype default=".pdf", ".png" is also possible
 #' @param w  width default=8
 #' @param h  height default=6
-#' @param colpalette  a vector of colors that changes the default color scheme e.g. something like c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
-#' @param shape.palette  a vector of shapes that changes the default shapes. e.g. something like c(16,16,15,17,17,15,17)
+#' @param colpalette  a vector of colors that changes the default color scheme, default is NULL, e.g. something like c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+#' @param shape.palette  a vector of shapes that changes the default shapes, default is null,  e.g. something like c(16,16,15,17,17,15,17)
 
 # @importFrom ggplot2 ggplot aes aes_string element_rect element_text geom_point geom_text labs margin theme theme_bw
 # @importFrom ggrepel geom_text_repel
