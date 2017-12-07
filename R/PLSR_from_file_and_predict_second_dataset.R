@@ -30,6 +30,7 @@
 #' @param shape.palette allows you to put in a shape palette of form c(1, 3,....etc) to manually assign shapes
 #' @param varimax If T performs Varimax rotation, 
 #' @param varimax.comp # of varimax components, kind of hacky, keep this # the same as # of comps. Will fix later.
+#' @param output_folder the folder to output to, default is ./ i.e. current folder
 #'
 #' @importFrom mixOmics pls
 #' @export
@@ -39,8 +40,8 @@ PLSR_from_file_and_predict_second_dataset<-function (file, file2, sample.names, 
                                                      title = "PLSR", comp.x = "comp.1", comp.y = "comp.2", comps = 2, 
                                                      labels = F,saveplot=T,savename="default",
                                                      savetype = ".png", w = 8, h = 6, legendname = "default",scale=F,
-                                                     plot_both=F,colpalette=NULL,shape.palette=NULL,ellipses=T,conf=0.9,
-                                                     varimax=F,varimax.comp=2) {
+                                                     plot_both=T,colpalette=NULL,shape.palette=NULL,ellipses=T,conf=0.9,
+                                                     varimax=F,varimax.comp=2,output_folder="./") {
   require(mixOmics)
   data = read.table(file, sep = "\t", header = T, stringsAsFactors = FALSE, 
                     quote = "")
@@ -173,11 +174,10 @@ PLSR_from_file_and_predict_second_dataset<-function (file, file2, sample.names, 
             axis.text.y = element_text(margin = margin(l = -14))) + 
       labs(title = title) + theme_bw()
     if(saveplot==T){
-      ggsave(paste0(test_string,"_projected_onto_",train_string,"_", comp.x, "_vs_", comp.y, savetype), 
+      ggsave(paste0(output_folder,test_string,"_projected_onto_",train_string,"_", comp.x, "_vs_", comp.y, savetype), 
              dpi = 300, plot = pc.pred, width = w, height = h)
     }
     pc.pred
   }
 }
-
 
