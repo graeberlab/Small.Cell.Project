@@ -20,7 +20,6 @@
 #' @param train_string string of training data to insert in file name of predicted scores
 #' @param test_string string of data being tested to insert in file name of predicted scores
 #' @param saveplot whether to save the plot, default is F
-#' @param savename the name to save plot under
 #' @param savetype the type of plot to save,options are ".pdf" or ".png"
 #' @param w is width of plot to be saved
 #' @param h is height of plot to be saved
@@ -38,7 +37,7 @@
 PLSR_from_file_and_predict_second_dataset<-function (file, file2, sample.names, sample.type, y.response, 
                                                      sample.names2 = NULL, sample.type2 = NULL, train_string, test_string, 
                                                      title = "PLSR", comp.x = "comp.1", comp.y = "comp.2", comps = 2, 
-                                                     labels = F,saveplot=T,savename="default",
+                                                     labels = F,saveplot=T,
                                                      savetype = ".png", w = 8, h = 6, legendname = "default",scale=F,
                                                      plot_both=T,colpalette=NULL,shape.palette=NULL,ellipses=T,conf=0.9,
                                                      varimax=F,varimax.comp=2,output_folder="./") {
@@ -159,7 +158,7 @@ PLSR_from_file_and_predict_second_dataset<-function (file, file2, sample.names, 
     }
     
     if(saveplot==T){
-      ggsave(paste0(savename, "_", comp.x, "_vs_", comp.y, savetype), 
+      ggsave(paste0(output_folder,test_string,"_projected_onto_",train_string, "_", comp.x, "_vs_", comp.y, savetype), 
              dpi = 300, plot = pc.pred3, width = w, height = h)
     }
     pc.pred3
