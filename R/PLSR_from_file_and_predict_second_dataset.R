@@ -116,7 +116,7 @@ PLSR_from_file_and_predict_second_dataset<-function (file, file2, sample.names, 
     
   }
   write.table(cbind(Sample = rownames(prediction), (prediction)), 
-              paste0(gsub(".txt", "", file2), "_", train_string, "_PLSR_predicted.scores.txt"), 
+              paste0(output_folder,test_string,"_projected_onto_",train_string, "_PLSR_predicted.scores.txt"), 
               sep = "\t", row.names = F, quote = F)
   prediction$type = sample.type2[match(rownames(prediction), 
                                        sample.names2)]
