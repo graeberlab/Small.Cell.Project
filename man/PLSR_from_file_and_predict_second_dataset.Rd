@@ -8,10 +8,10 @@ PLSR_from_file_and_predict_second_dataset(file, file2, sample.names,
   sample.type, y.response, sample.names2 = NULL, sample.type2 = NULL,
   train_string, test_string, title = "PLSR", comp.x = "comp.1",
   comp.y = "comp.2", comps = 2, labels = F, saveplot = T,
-  savename = "default", savetype = ".png", w = 8, h = 6,
-  legendname = "default", scale = F, plot_both = F, colpalette = NULL,
-  shape.palette = NULL, ellipses = T, conf = 0.9, varimax = F,
-  varimax.comp = 2)
+  savetype = ".png", w = 8, h = 6, legendname = "default", scale = F,
+  plot_both = T, colpalette = NULL, shape.palette = NULL, ellipses = T,
+  conf = 0.9, varimax = F, varimax.comp = 2, output_folder = "./",
+  TCGA = F)
 }
 \arguments{
 \item{file}{file for X matirx}
@@ -40,8 +40,6 @@ PLSR_from_file_and_predict_second_dataset(file, file2, sample.names,
 
 \item{saveplot}{whether to save the plot, default is F}
 
-\item{savename}{the name to save plot under}
-
 \item{savetype}{the type of plot to save,options are ".pdf" or ".png"}
 
 \item{w}{is width of plot to be saved}
@@ -61,6 +59,10 @@ PLSR_from_file_and_predict_second_dataset(file, file2, sample.names,
 \item{varimax}{If T performs Varimax rotation,}
 
 \item{varimax.comp}{# of varimax components, kind of hacky, keep this # the same as # of comps. Will fix later.}
+
+\item{output_folder}{the folder to output to, default is ./ i.e. current folder}
+
+\item{TCGA}{predicted files are from TCGA, barcodes separated by periods, so remove normal samples, default is FALSE}
 
 \item{comp}{number of components to compute}
 }

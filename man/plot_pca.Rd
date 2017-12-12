@@ -7,7 +7,8 @@
 plot_pca(file, info.name, info.type, title = "", labels = TRUE,
   label_file = NULL, label_name, PCx = "PC1", PCy = "PC2", ellipses = F,
   conf = 0.95, point_size = 3, savename = "example", saveplot = F,
-  savetype = ".png", w = 8, h = 6, label_size = 3)
+  savetype = ".png", w = 8, h = 6, label_size = 3, colpalette = NULL,
+  shape.palette = NULL, legendname = "default")
 }
 \arguments{
 \item{file}{File containing scores matrix}
@@ -39,6 +40,10 @@ plot_pca(file, info.name, info.type, title = "", labels = TRUE,
 \item{w}{width default=8}
 
 \item{h}{height default=6}
+
+\item{colpalette}{a vector of colors that changes the default color scheme, default is NULL, e.g. something like c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")}
+
+\item{shape.palette}{a vector of shapes that changes the default shapes, default is null,  e.g. something like c(16,16,15,17,17,15,17)}
 }
 \description{
 Plots PCA from scores file (output of PCA_from_file)
