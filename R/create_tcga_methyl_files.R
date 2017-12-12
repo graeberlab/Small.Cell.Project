@@ -30,8 +30,11 @@ create_tcga_methyl_files=function(file,subset=TRUE,mysites=NULL,out.string="blah
   colnames(methyl)[1]="Site"
   methyl=na.omit(methyl)
   nam=strsplit(strsplit(file,"/")[[1]][length(strsplit(file,"/")[[1]])],"\\.")[[1]][1]
+  if(normals==T){
+    write.table(methyl,paste0(nam,"_normals_methyl_","450K_",out.string,".txt"),sep="\t",quote=F,row.names=F)
+  } else{
   write.table(methyl,paste0(nam,"_methyl_","450K_",out.string,".txt"),sep="\t",quote=F,row.names=F)
-  
+  }
 }
 
 
