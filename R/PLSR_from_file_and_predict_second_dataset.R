@@ -41,8 +41,7 @@ PLSR_from_file_and_predict_second_dataset=function (file, file2, sample.names, s
           comps = 2, labels = F, saveplot = T, savetype = ".png", w = 8, 
           h = 6, legendname = "default", scale = F, plot_both = T, 
           colpalette = NULL, shape.palette = NULL, ellipses = T, conf = 0.9, 
-          varimax = F, varimax.comp = 2, output_folder = "./",TCGA=F) 
-{
+          varimax = F, varimax.comp = 2, output_folder = "./",TCGA=F) {
   require(mixOmics)
   data = read.table(file, sep = "\t", header = T, stringsAsFactors = FALSE, 
                     quote = "")
