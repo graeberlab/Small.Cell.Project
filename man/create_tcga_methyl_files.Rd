@@ -5,7 +5,7 @@
 \title{Create methylation files for TCGA cancers using defined sets of sites}
 \usage{
 create_tcga_methyl_files(file, subset = TRUE, mysites = NULL,
-  out.string = "blah", normals = F)
+  out.string = "blah", normals = F, output_folder = "./")
 }
 \arguments{
 \item{file}{input methylation file , file name is of form "ACC_etc_etc...."}

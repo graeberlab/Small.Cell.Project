@@ -10,17 +10,17 @@
 #'
 #' @export
 #'
-create_tcga_methyl_files=function(file,subset=TRUE,mysites=NULL,out.string="blah",normals=F){
+create_tcga_methyl_files=function(file,subset=TRUE,mysites=NULL,out.string="blah",normals=F,output_folder="./"){
   methyl.pre=fread(file,sep="\t",header =T, stringsAsFactors = F,check.names=F,nrows=0)
-  colnames(methyl)[-1]=substr(colnames(methyl)[-1],1,15)
-  colnames(methyl)[-1]=make.names(colnames(methyl)[-1])
   methyl.colnums=c(1,seq(2,ncol(methyl.pre),4))
   methyl=fread(file,sep="\t",header =T, stringsAsFactors = F,check.names=F,select=methyl.colnums)
+  colnames(methyl)[-1]=substr(colnames(methyl)[-1],1,15)
+  colnames(methyl)[-1]=make.names(colnames(methyl)[-1])
   methyl=methyl[-1,]
   if(normals==T) {
-    my_samps=which(as.numeric(sapply(colnames(methyl.pre),function(x) strsplit(x,"\\.")[[1]][4])) > 9)
+    my_samps=c(1,which(as.numeric(sapply(colnames(methyl),function(x) strsplit(x,"\\.")[[1]][4])) > 9))
   } else {
-  my_samps=c(1,which(as.numeric(sapply(colnames(methyl),function(x) strsplit(x,"\\.")[[1]][4])) <= 9))
+   my_samps=c(1,which(as.numeric(sapply(colnames(methyl),function(x) strsplit(x,"\\.")[[1]][4])) <= 9))
   }
   methyl=as.data.frame(methyl)
   methyl=methyl[ ,my_samps]
@@ -31,9 +31,9 @@ create_tcga_methyl_files=function(file,subset=TRUE,mysites=NULL,out.string="blah
   methyl=na.omit(methyl)
   nam=strsplit(strsplit(file,"/")[[1]][length(strsplit(file,"/")[[1]])],"\\.")[[1]][1]
   if(normals==T){
-    write.table(methyl,paste0(nam,"_normals_methyl_","450K_",out.string,".txt"),sep="\t",quote=F,row.names=F)
+    write.table(methyl,paste0(output_folder,nam,"_normals_methyl_","450K_",out.string,".txt"),sep="\t",quote=F,row.names=F)
   } else{
-  write.table(methyl,paste0(nam,"_methyl_","450K_",out.string,".txt"),sep="\t",quote=F,row.names=F)
+  write.table(methyl,paste0(output_folder,nam,"_cancers_methyl_","450K_",out.string,".txt"),sep="\t",quote=F,row.names=F)
   }
 }
 
