@@ -42,15 +42,15 @@ PLSDA_from_file_and_predict_second_dataset = function(file, file2, sample.names,
   y.response = as.factor(as.character(response.values[match(rownames(t.data), sample.names)]))
   pls.fit = mixOmics::plsda(X = t.data, Y = y.response, scale = scale, ncomp = comps)
   plotIndiv(pls.fit, legend = T,ind.names = ind.names)
-  write.table(as.data.frame(pls.fit$loadings$X),paste0(output_folder,train_string,  "_methyl_PLSDA_Xloadings.txt"), sep = "\t", row.names = T, 
+  write.table(as.data.frame(pls.fit$loadings$X),paste0(output_folder,train_string,  "_PLSDA_Xloadings.txt"), sep = "\t", row.names = T, 
               quote = F)
-  write.table(as.data.frame(pls.fit$variates$X),paste0(output_folder,train_string,  "_methyl_PLSDA_XScores.txt"), sep = "\t", row.names = T, 
+  write.table(as.data.frame(pls.fit$variates$X),paste0(output_folder,train_string,  "_PLSDA_XScores.txt"), sep = "\t", row.names = T, 
               quote = F)
   rownames(data2) = data2[,1]
   t.data2 = data.frame(t(data2[,-1])) 
   
   test.predict <- predict(pls.fit, t.data2, method = "max.dist")
-  write.table(test.predict$variates,paste0(output_folder,train_string,"_projected_onto_",test_string,"_methyl_prediction_PLSDA_XScores.txt"),col.names=NA,quote=F,sep="\t",row.names=T)
+  write.table(test.predict$variates,paste0(output_folder,train_string,"_projected_onto_",test_string,"_prediction_PLSDA_XScores.txt"),col.names=NA,quote=F,sep="\t",row.names=T)
   
   prediction <- as.data.frame(test.predict$class$max.dist[, comps])
   colnames(prediction)[1] <-"prediction"
