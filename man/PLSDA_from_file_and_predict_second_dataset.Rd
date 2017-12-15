@@ -6,7 +6,8 @@
 \usage{
 PLSDA_from_file_and_predict_second_dataset(file, file2, sample.names,
   response.values, sample.names2 = NULL, response.values2 = NULL,
-  comps = 3, scale = F, ind.names = F)
+  comps = 3, scale = F, ind.names = F, output_folder = "./",
+  train_string = "", test_string = "")
 }
 \arguments{
 \item{file}{file for X matirx}
@@ -24,6 +25,12 @@ PLSDA_from_file_and_predict_second_dataset(file, file2, sample.names,
 \item{scale}{default=T}
 
 \item{ind.names}{Labels the samples, default =F}
+
+\item{output_folder}{the output_folder to write files to}
+
+\item{train_string}{string of training data to insert in file name of predicted scores}
+
+\item{test_string}{string of data being tested to insert in file name of predicted scores}
 
 \item{response.values}{Vector of response values in same order matching sample.names2, if available}
 }
