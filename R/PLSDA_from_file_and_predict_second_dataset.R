@@ -50,11 +50,12 @@ PLSDA_from_file_and_predict_second_dataset = function(file, file2, sample.names,
   t.data2 = data.frame(t(data2[,-1])) 
   
   test.predict <- predict(pls.fit, t.data2, method = "max.dist")
-  write.table(test.predict$variates,paste0(output_folder,train_string,"_projected_onto_",test_string,"_",comps,"_comps_PLSDA_Xscores.txt"),col.names=NA,quote=F,sep="\t",row.names=T)
+  write.table(test.predict$variates,paste0(output_folder,test_string,"_projected_onto_",train_string,"_",comps,"_comps_PLSDA_Xscores.txt"),col.names=NA,quote=F,sep="\t",row.names=T)
   
   prediction <- as.data.frame(test.predict$class$max.dist[, comps])
-  colnames(prediction)[1] <-"prediction"
-  write.table(prediction,paste0(output_folder,train_string,"_projected_onto_",test_string,"_",comps,"_comps_PLSDA_prediction.txt"),col.names=NA,quote=F,sep="\t",row.names=T)
+  prediction <- prediction %>% tibble::rownames_to_column()
+  colnames(prediction)= c("sample","prediction")
+  write.table(prediction,paste0(output_folder,test_string,"_projected_onto_",train_string,"_",comps,"_comps_PLSDA_prediction.txt"),col.names=T,quote=F,sep="\t",row.names=F)
 
   if (!is.null(sample.names2)) {
     prediction$actual = (response.values2[match(rownames(prediction), sample.names2)])
