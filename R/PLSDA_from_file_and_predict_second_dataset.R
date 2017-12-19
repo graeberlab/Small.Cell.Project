@@ -50,7 +50,10 @@ PLSDA_from_file_and_predict_second_dataset = function(file, file2, sample.names,
   t.data2 = data.frame(t(data2[,-1])) 
   
   test.predict <- predict(pls.fit, t.data2, method = "max.dist")
-  write.table(test.predict$variates,paste0(output_folder,test_string,"_projected_onto_",train_string,"_",comps,"_comps_PLSDA_Xscores.txt"),col.names=NA,quote=F,sep="\t",row.names=T)
+  test.predict.scores=as.data.frame(test.predict$variates) %>% tibble::rownames_to_column()
+  colnames(test.predict.scores)[1]="sample"
+  colnames(test.predict.scores)[2:ncol(test.predict.scores)]=  paste0(rep( "comp.",(ncol(test.predict.scores)-1)),1:(ncol(test.predict.scores)-1))
+  write.table(test.predict.scores,paste0(output_folder,test_string,"_projected_onto_",train_string,"_",comps,"_comps_PLSDA_Xscores.txt"),col.names=T,quote=F,sep="\t",row.names=F)
   
   prediction <- as.data.frame(test.predict$class$max.dist[, comps])
   prediction <- prediction %>% tibble::rownames_to_column()

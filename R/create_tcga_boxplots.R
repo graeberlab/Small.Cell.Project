@@ -8,7 +8,7 @@
 #' @param train_string string that has information on the training set, make sure to describe the # of featres
 #' @param output_folder the folder to output to, default is ./ i.e. current folder
 #' 
-#' @importFrom mixOmics pls
+#' @importFrom mixOmics pls data.table
 #' @export
 #'
 
@@ -31,8 +31,8 @@ create_tcga_boxplots=function(dir,pattern,output_string,output_folder="./"){
     colnames(blah)[[1]]="Sample"
     blah
   })
-  output<-data.frame(rbindlist(list_of_dataframes))
-  output.scaled<-data.frame(rbindlist(list_of_dataframes_scaled))
+  output<-data.frame(data.table::rbindlist(list_of_dataframes))
+  output.scaled<-data.frame(data.table::rbindlist(list_of_dataframes_scaled))
   
   
   output.scaled.by.top3.avg=output.scaled %>% dplyr::group_by(type) %>% dplyr::arrange(type,dplyr::desc(comp.1)) %>% dplyr::slice(1:3) %>% dplyr::summarise(avg=mean(comp.1)) %>% dplyr::arrange(dplyr::desc(avg))
