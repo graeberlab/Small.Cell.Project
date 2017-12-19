@@ -48,15 +48,33 @@ create_tcga_boxplots=function(dir,pattern,output_string,output_folder="./"){
   ## TCGA data unscaled 
   set.seed(79)
   unscaled.pic<-ggplot(data=output,aes(x = factor(type,levels=unscaled.bymean), y = comp.1))+geom_boxplot(outlier.color=NA)+
-    geom_jitter(width=0.1,aes(color=factor(type)))+theme(axis.text=element_text(size=10,face="bold",angle=90),axis.title=element_text(size=8,face="bold"),legend.position="none")+
+    geom_jitter(width=0.1,aes(color=factor(type)))+theme_bw()+
+    theme(axis.text=element_text(size=10,face="bold",angle=90),axis.title=element_text(size=8,face="bold"),legend.position="none",panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank(),
+          panel.border = element_blank(),
+          panel.background = element_blank(), axis.line = element_line(colour = "black", size = 1, linetype = "solid"))+
     scale_color_manual(values =  sample(col_vector,size=40))
-  ggsave(paste0(output_folder,output_string,"_TCGA_unscaled_by_mean.png"), 
+  ggsave(paste0(output_folder,output_string,"_TCGA_unscaled_by_mean.png"),
          dpi = 300, plot = unscaled.pic, width = 8, height = 5)
-  # TCGA scaled by top 3
+  #TCGA scaled by top 3
   set.seed(79)
-  scaled.pic<-ggplot(data=output.scaled,aes(x = factor(type,levels=scaled.by.top.3), y = comp.1))+geom_boxplot(outlier.color=NA)+  
-    geom_jitter(width=0.1,aes(color=factor(type)))+theme(axis.text=element_text(size=10,face="bold",angle=90),axis.title=element_text(size=8,face="bold"),legend.position="none")+
+
+  
+  axis.line = element_line(colour = "darkblue", 
+                           size = 1, linetype = "solid")
+  
+  scaled.pic<-ggplot(data=output.scaled,aes(x = factor(type,levels=scaled.by.top.3), y = comp.1))+
+     geom_boxplot(outlier.color=NA)+
+     geom_jitter(width=0.1,aes(color=factor(type)))+ #theme_bw()+
+     theme(axis.text=element_text(size=10,face="bold",angle=90),axis.title=element_text(size=8,face="bold"),legend.position="none",
+           panel.grid.major = element_blank(),
+           panel.grid.minor = element_blank(),
+           panel.border = element_blank(),
+           panel.background = element_blank(), 
+           axis.line = element_line(colour = "black", size = 1, linetype = "solid"))+
     scale_color_manual(values =  sample(col_vector,size=40))
-  ggsave(paste0(output_folder,output_string,"_TCGA_scaled_by_avg_top3.png"), 
+
+
+  ggsave(paste0(output_folder,output_string,"_TCGA_scaled_by_avg_top3.png"),
          dpi = 300, plot = scaled.pic, width = 8, height = 5)
 }
