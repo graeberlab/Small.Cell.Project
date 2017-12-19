@@ -8,7 +8,8 @@
 #' @param train_string string that has information on the training set, make sure to describe the # of featres
 #' @param output_folder the folder to output to, default is ./ i.e. current folder
 #' 
-#' @importFrom mixOmics pls data.table
+#' @importFrom mixOmics pls 
+#' @importFrom data.table rbindlist
 #' @export
 #'
 
