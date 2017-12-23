@@ -17,24 +17,36 @@ create_tcga_methyl_files=function(file,subset=TRUE,mysites=NULL,out.string="blah
   colnames(methyl)[-1]=substr(colnames(methyl)[-1],1,15)
   colnames(methyl)[-1]=make.names(colnames(methyl)[-1])
   methyl=methyl[-1,]
-  if(normals==T) {
-    my_samps=c(1,which(as.numeric(sapply(colnames(methyl),function(x) strsplit(x,"\\.")[[1]][4])) > 9))
-  } else {
-   my_samps=c(1,which(as.numeric(sapply(colnames(methyl),function(x) strsplit(x,"\\.")[[1]][4])) <= 9))
-  }
+  my_samps.normals=c(1,which(as.numeric(sapply(colnames(methyl),function(x) strsplit(x,"\\.")[[1]][4])) > 9))
+  my_samps.cancers=c(1,which(as.numeric(sapply(colnames(methyl),function(x) strsplit(x,"\\.")[[1]][4])) <= 9))
   methyl=as.data.frame(methyl)
-  methyl=methyl[ ,my_samps]
-  if(subset==T){
-    methyl=methyl[methyl[,1] %in% mysites,]
-  } 
-  colnames(methyl)[1]="Site"
-  methyl=na.omit(methyl)
-  nam=strsplit(strsplit(file,"/")[[1]][length(strsplit(file,"/")[[1]])],"\\.")[[1]][1]
-  if(normals==T){
-    write.table(methyl,paste0(output_folder,nam,"_normals_methyl_","450K_",out.string,".txt"),sep="\t",quote=F,row.names=F)
+  if(length(my_samps.normals)==0){
+    methyl.cancers=methyl[ ,my_samps.cancers,drop=F]
+    colnames(methyl.cancers)[1]="Site"
+    methyl.cancers=na.omit(methyl.cancers)
+    
+    if(subset==T){
+      methyl.cancers=methyl.cancers[methyl.cancers[,1] %in% mysites,]
+    } 
+    nam=strsplit(strsplit(file,"/")[[1]][length(strsplit(file,"/")[[1]])],"\\.")[[1]][1]
+    write.table(methyl.cancers,paste0(output_folder,nam,"_cancers_methyl_","450K_",out.string,".txt"),sep="\t",quote=F,row.names=F)
+    
   } else{
-  write.table(methyl,paste0(output_folder,nam,"_cancers_methyl_","450K_",out.string,".txt"),sep="\t",quote=F,row.names=F)
+    methyl.normals=methyl[ ,my_samps.normals,drop=F]
+    methyl.cancers=methyl[ ,my_samps.cancers,drop=F]
+    colnames(methyl.normals)[1]="Site"
+    colnames(methyl.cancers)[1]="Site"
+    methyl.normals=na.omit(methyl.normals)
+    methyl.cancers=na.omit(methyl.cancers)
+    if(subset==T){
+      methyl.cancers=methyl.cancers[methyl.cancers[,1] %in% mysites,]
+      methyl.normals=methyl.normals[methyl.normals[,1] %in% mysites,]
+    }
+    
+    write.table(methyl.normals,paste0(output_folder,nam,"_normals_methyl_","450K_",out.string,".txt"),sep="\t",quote=F,row.names=F)
+    write.table(methyl.cancers,paste0(output_folder,nam,"_cancers_methyl_","450K_",out.string,".txt"),sep="\t",quote=F,row.names=F)
   }
 }
+
 
 
