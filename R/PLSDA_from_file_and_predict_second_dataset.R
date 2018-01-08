@@ -15,6 +15,7 @@
 #' @param response.values Vector of response values in same order matching sample.names2, if available
 #' @param train_string string of training data to insert in file name of predicted scores
 #' @param test_string string of data being tested to insert in file name of predicted scores
+#' @param TCGA default is false, true if test samples are TCGA, removes normal samples
 #' 
 #' @importFrom mixOmics plsda plotIndiv
 #' 
@@ -23,7 +24,7 @@
 
 
 PLSDA_from_file_and_predict_second_dataset = function(file, file2, sample.names, sample.type, y.response, 
-                                                      sample.names2 = NULL, sample.type2 = NULL, comps = 3, scale = F, ind.names = F,output_folder="./",train_string="",test_string=""){
+                                                      comps = 3, scale = F, ind.names = F,output_folder="./",train_string="",test_string="",TCGA=F){
   require(mixOmics)
   data = read.table(file, sep = "\t", header = T, stringsAsFactors = FALSE, 
                     quote = "")
@@ -33,6 +34,13 @@ PLSDA_from_file_and_predict_second_dataset = function(file, file2, sample.names,
                      quote = "")
   data = data[!duplicated(data[, 1]), ]
   data2 = data2[!duplicated(data2[, 1]), ]
+  if (TCGA == T) {
+    temp_name = colnames(data2)[1]
+    cancer_samples = which(as.numeric(sapply(colnames(data2)[-1], 
+                                             function(x) strsplit(x, "\\.")[[1]][4])) <= 9)
+    data2 = cbind(data2[, 1], data2[, -1][, cancer_samples])
+    colnames(data2)[1] = temp_name
+  }
   common.genes = intersect_all(data[, 1], data2[, 1])
   data = data[data[, 1] %in% common.genes, ]
   data2 = data2[data2[, 1] %in% common.genes, ]
@@ -45,9 +53,9 @@ PLSDA_from_file_and_predict_second_dataset = function(file, file2, sample.names,
   y.response = as.factor(y.response)
   pls.fit = mixOmics::plsda(X = t.data, Y = y.response, scale = scale, ncomp = comps)
   plotIndiv(pls.fit, legend = T,ind.names = ind.names)
-  write.table(as.data.frame(pls.fit$loadings$X),paste0(output_folder,train_string,  "_PLSDA_Xloadings.txt"), sep = "\t", row.names = T, 
+  write.table(as.data.frame(pls.fit$loadings$X),paste0(output_folder,train_string,  "_PLSDA_Xloadings.txt"), sep = "\t", row.names = T,col.names=NA, 
               quote = F)
-  write.table(as.data.frame(pls.fit$variates$X),paste0(output_folder,train_string,  "_PLSDA_XScores.txt"), sep = "\t", row.names = T, 
+  write.table(as.data.frame(pls.fit$variates$X),paste0(output_folder,train_string,  "_PLSDA_XScores.txt"), sep = "\t", row.names = T, col.names=NA,
               quote = F)
   rownames(data2) = data2[,1]
   t.data2 = data.frame(t(data2[,-1])) 
@@ -63,10 +71,10 @@ PLSDA_from_file_and_predict_second_dataset = function(file, file2, sample.names,
   colnames(prediction)= c("sample","prediction")
   write.table(prediction,paste0(output_folder,test_string,"_projected_onto_",train_string,"_",comps,"_comps_PLSDA_prediction.txt"),col.names=T,quote=F,sep="\t",row.names=F)
 
-  if (!is.null(sample.names2)) {
-    prediction$actual = (response.values2[match(rownames(prediction), sample.names2)])
-    print(table(prediction$prediction, droplevels(prediction$actual)))
-  }
+
+    prediction$actual = sample.type[match(prediction$sample,sample.names)]
+    print(table(prediction$prediction, prediction$actual))
+  
   return(prediction)
   
 }

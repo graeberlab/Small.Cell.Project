@@ -5,9 +5,8 @@
 \title{Partial Least Squares and predict second dataset}
 \usage{
 PLSDA_from_file_and_predict_second_dataset(file, file2, sample.names,
-  response.values, sample.names2 = NULL, response.values2 = NULL,
-  comps = 3, scale = F, ind.names = F, output_folder = "./",
-  train_string = "", test_string = "")
+  sample.type, y.response, comps = 3, scale = F, ind.names = F,
+  output_folder = "./", train_string = "", test_string = "", TCGA = F)
 }
 \arguments{
 \item{file}{file for X matirx}
@@ -15,10 +14,6 @@ PLSDA_from_file_and_predict_second_dataset(file, file2, sample.names,
 \item{file2}{file for test data matrix}
 
 \item{sample.names}{Vector of sample names in X matrix}
-
-\item{response.values}{Vector of response values in same order matching sample.names}
-
-\item{sample.names2}{Vector of sample names in 2nd dataset, if needed}
 
 \item{comps}{number of components to compute}
 
@@ -31,6 +26,12 @@ PLSDA_from_file_and_predict_second_dataset(file, file2, sample.names,
 \item{train_string}{string of training data to insert in file name of predicted scores}
 
 \item{test_string}{string of data being tested to insert in file name of predicted scores}
+
+\item{TCGA}{default is false, true if test samples are TCGA, removes normal samples}
+
+\item{response.values}{Vector of response values in same order matching sample.names}
+
+\item{sample.names2}{Vector of sample names in 2nd dataset, if needed}
 
 \item{response.values}{Vector of response values in same order matching sample.names2, if available}
 }

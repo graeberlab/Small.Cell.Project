@@ -29,6 +29,7 @@
 #' @param shape.palette allows you to put in a shape palette of form c(1, 3,....etc) to manually assign shapes
 #' @param varimax If T performs Varimax rotation, 
 #' @param varimax.comp # of varimax components, kind of hacky, keep this # the same as # of comps. Will fix later.
+#' @param TCGA predicted files are from TCGA, barcodes separated by periods, so remove normal samples, default is FALSE
 #' @export
 #'
 PLSR_from_file_and_predict_second_dataset_graph<-function (file, file2, sample.names, sample.type, y.response, 
@@ -42,6 +43,13 @@ PLSR_from_file_and_predict_second_dataset_graph<-function (file, file2, sample.n
               ]
   data2 = read.table(file2, sep = "\t", header = T, stringsAsFactors = FALSE, 
                      quote = "")
+  if (TCGA == T) {
+    temp_name = colnames(data2)[1]
+    cancer_samples = which(as.numeric(sapply(colnames(data2)[-1], 
+                                             function(x) strsplit(x, "\\.")[[1]][4])) <= 9)
+    data2 = cbind(data2[, 1], data2[, -1][, cancer_samples])
+    colnames(data2)[1] = temp_name
+  }
   data = data[!duplicated(data[, 1]), ]
   data2 = data2[!duplicated(data2[, 1]), ]
   common.genes = intersect_all(data[, 1], data2[, 1])
