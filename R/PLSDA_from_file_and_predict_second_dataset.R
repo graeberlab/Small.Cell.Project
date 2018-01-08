@@ -22,24 +22,27 @@
 #'
 
 
-PLSDA_from_file_and_predict_second_dataset = function(file, file2, sample.names, response.values, sample.names2=NULL,
-         response.values2=NULL, comps = 3, scale = F, ind.names = F,output_folder="./",train_string="",test_string=""){
+PLSDA_from_file_and_predict_second_dataset = function(file, file2, sample.names, sample.type, y.response, 
+                                                      sample.names2 = NULL, sample.type2 = NULL, comps = 3, scale = F, ind.names = F,output_folder="./",train_string="",test_string=""){
   require(mixOmics)
-  data = read.table(file, sep='\t',header=T,stringsAsFactors=FALSE, quote = "")
-  data = data[rowSums((data[, -1] == 0)) < ncol(data[-1]), ] #remove genes with no variance
-  data2 = read.table(file2, sep='\t',header=T,stringsAsFactors=FALSE, quote = "")
-  
-  common.genes = intersect_all(data[,1], data2[,1])
-  data = data[data[,1] %in% common.genes, ]
-  data2 = data2[data2[,1] %in% common.genes, ]
-  data = data[order(data[,1]), ]
-  data2 = data2[order(data2[,1]), ]
-  # data=data1[match(common.genes,data[,1]),]
-  # data2=data2[match(common.genes,data2[,1]),]
-  
-  rownames(data) = data[,1]
-  t.data = data.frame(t(data[,-1])) 
-  y.response = as.factor(as.character(response.values[match(rownames(t.data), sample.names)]))
+  data = read.table(file, sep = "\t", header = T, stringsAsFactors = FALSE, 
+                    quote = "")
+  data = data[rowSums((data[, -1] == 0)) < ncol(data[-1]), 
+              ]
+  data2 = read.table(file2, sep = "\t", header = T, stringsAsFactors = FALSE, 
+                     quote = "")
+  data = data[!duplicated(data[, 1]), ]
+  data2 = data2[!duplicated(data2[, 1]), ]
+  common.genes = intersect_all(data[, 1], data2[, 1])
+  data = data[data[, 1] %in% common.genes, ]
+  data2 = data2[data2[, 1] %in% common.genes, ]
+  data = data[order(data[, 1]), ]
+  data2 = data2[order(data2[, 1]), ]
+  rownames(data) = make.names(data[, 1], unique = TRUE)
+  t.data = data.frame(t(data[, -1]))
+  y.response = (data.frame(y.response)[match(rownames(t.data), 
+                                             as.character(sample.names)), ])
+  y.response = as.factor(y.response)
   pls.fit = mixOmics::plsda(X = t.data, Y = y.response, scale = scale, ncomp = comps)
   plotIndiv(pls.fit, legend = T,ind.names = ind.names)
   write.table(as.data.frame(pls.fit$loadings$X),paste0(output_folder,train_string,  "_PLSDA_Xloadings.txt"), sep = "\t", row.names = T, 
