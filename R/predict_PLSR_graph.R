@@ -30,7 +30,7 @@ predict_plsr_graph=function(prediction_file,test_files_folder,anno.file,output_f
                                               sample.names= human.info$sample, sample.type = factor(human.info$type),
                                               y.response =  ifelse(human.info$type==train_pattern,1,0),
                                               sample.names2 = human.info$sample,sample.type2 =  factor(human.info$type), test_string = nam,
-                                              "Projection", comps = comps, scale = F, labels =F,output_folder=output_folder,train_string=train_string)
+                                              "Projection", comps = comps, scale = F, labels =F,output_folder=output_folder,train_string=train_string,TCGA=T)
     print(paste0("Cancer ",nam," is done!"))
   }
 }

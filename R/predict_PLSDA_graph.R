@@ -27,11 +27,10 @@ predict_PLSDA_graph=function(prediction_file,test_files_folder,anno.file,output_
     nam=all.names[i]
     PLSDA_from_file_and_predict_second_dataset(file = prediction_file,
                                               file2=all.files.long.path[i],
-                                              sample.names= human.info$sample, 
-                                              response.values =  ifelse(human.info$type==train_pattern,1,0),
-                                              sample.names2 = human.info$sample, response.values2=factor(human.info$type),
+                                              sample.names= human.info$sample,sample.type=human.info$type, 
+                                              y.response =  ifelse(human.info$type==train_pattern,1,0),
                                               test_string = nam,
-                                              "Projection", comps = comps, scale = F,output_folder=output_folder,train_string=train_string)
+                                              "Projection", comps = comps, scale = F,output_folder=output_folder,train_string=train_string,TCGA=T)
     print(paste0("Cancer ",nam," is done!"))
   }
 }
