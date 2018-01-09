@@ -4,7 +4,7 @@
 \alias{PCA_from_file}
 \title{PCA from file}
 \usage{
-PCA_from_file(file, center = TRUE, scale = FALSE)
+PCA_from_file(file, center = TRUE, scale = FALSE, rank. = NULL)
 }
 \arguments{
 \item{file}{Filepath/filename of data matrix}
@@ -12,6 +12,8 @@ PCA_from_file(file, center = TRUE, scale = FALSE)
 \item{center}{default=T}
 
 \item{scale}{default=F}
+
+\item{rank.}{how many pcs to calculate, default is equal to # of samples, useful when you only really need a few pcs}
 }
 \description{
 Reads file with samples in columns and variables in rows, and does PCA. Writes to file scores, loadings, eigenvalues.

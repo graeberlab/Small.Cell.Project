@@ -36,6 +36,7 @@
 #' @importFrom mixOmics pls
 #' @export
 #'
+
 MINT.PLSDA_from_file_and_predict_second_dataset<-function (..., file2 , study.names,sample.names, sample.type, y.response, 
                                                          sample.names2 = NULL, sample.type2 = NULL, train_string, 
                                                          test_string, title = "PLSR", comp.x = "comp.1", comp.y = "comp.2", 

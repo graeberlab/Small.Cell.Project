@@ -5,6 +5,7 @@
 #' @param file Filepath/filename of data matrix
 #' @param center default=T
 #' @param scale default=F
+#' @param rank. how many pcs to calculate, default is equal to # of samples, useful when you only really need a few pcs
 #' 
 #' @importFrom stats prcomp screeplot
 #' @importFrom utils read.delim read.table write.table
@@ -13,7 +14,7 @@
 #' 
 
 
-PCA_from_file=function(file,center=TRUE,scale=FALSE) {
+PCA_from_file=function(file,center=TRUE,scale=FALSE,rank.=NULL) {
   data=read.delim(file, header = T, stringsAsFactors = F)
   
   #remove rows that are all 0
@@ -21,7 +22,7 @@ PCA_from_file=function(file,center=TRUE,scale=FALSE) {
   
   #t.data = t(data) #if genenames in rownames
   t.data=t(data[,-1]) ##subtract off the gene name
-  pca<-prcomp(t.data,scale=scale,center=center);
+  pca<-prcomp(t.data,scale=scale,center=center,rank.=rank.);
   pca_scores=pca$x
   pca_scores=cbind("Score"=rownames(pca_scores),pca_scores)
   pca_loadings=pca$rotation
