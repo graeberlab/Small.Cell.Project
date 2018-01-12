@@ -5,7 +5,7 @@
 \title{Create methylation files for TCGA cancers using defined sets of sites}
 \usage{
 create_tcga_methyl_files(file, subset = TRUE, mysites = NULL,
-  out.string = "blah", normals = F, output_folder = "./")
+  out.string = "blah", output_folder = "./")
 }
 \arguments{
 \item{file}{input methylation file , file name is of form "ACC_etc_etc...."}
@@ -15,8 +15,6 @@ create_tcga_methyl_files(file, subset = TRUE, mysites = NULL,
 \item{mysites}{vector of site names}
 
 \item{out.string}{If subset=T Should be the string explaining the sites used}
-
-\item{normals}{If T only returns normals, default is false so returns only cancer samples}
 }
 \description{
 Takes illumina methylation files and creates new individualfiles using features that exist in the mysites files
