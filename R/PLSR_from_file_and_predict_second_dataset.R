@@ -41,7 +41,7 @@ PLSR_from_file_and_predict_second_dataset=function (file, file2, sample.names, s
           comps = 2, labels = F, saveplot = T, savetype = ".png", w = 8, 
           h = 6, legendname = "default", scale = F, plot_both = T, 
           colpalette = NULL, shape.palette = NULL, ellipses = T, conf = 0.9, 
-          varimax = F, varimax.comp = 2, output_folder = "./",TCGA=F) {
+          varimax = F, varimax.comp = 2, output_folder = "./",TCGA=F,threshold=3) {
   require(mixOmics)
   data = read.table(file, sep = "\t", header = T, stringsAsFactors = FALSE, 
                     quote = "")
@@ -109,8 +109,16 @@ PLSR_from_file_and_predict_second_dataset=function (file, file2, sample.names, s
               paste0(output_folder, test_string, "_projected_onto_", 
                      train_string, "_PLSR_predicted.scores.txt"), sep = "\t", 
               row.names = F, quote = F)
-  prediction$type = sample.type2[match(rownames(prediction), 
-                                       sample.names2)]
+  prediction.to.write=scale(prediction)
+  prediction.to.write=as.data.frame(prediction.to.write)
+  prediction.to.write$type = sample.type[match(rownames(prediction.to.write),sample.names)]
+  prediction.to.write$prediction =ifelse(prediction.to.write$comp.1 >=threshold, 1,0)
+  write.table(prediction.to.write,paste0(output_folder,test_string,"_projected_onto_",train_string,"_",comps,"_comps_PLSR_prediction.txt"),col.names=T,quote=F,sep="\t",row.names=F)
+  
+  prediction$type = sample.type[match(rownames(prediction),sample.names)]
+  
+  
+  
   pc.pred <- ggplot(prediction, aes_string(x = comp.x, y = comp.y)) + 
     geom_point(size = I(2), aes(color = factor(type))) + 
     theme(legend.position = "right", plot.title = element_text(size = 30), 

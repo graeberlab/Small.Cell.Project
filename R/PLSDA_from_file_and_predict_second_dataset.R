@@ -69,10 +69,10 @@ PLSDA_from_file_and_predict_second_dataset = function(file, file2, sample.names,
   prediction <- as.data.frame(test.predict$class$max.dist[, comps])
   prediction <- prediction %>% tibble::rownames_to_column()
   colnames(prediction)= c("sample","prediction")
-  write.table(prediction,paste0(output_folder,test_string,"_projected_onto_",train_string,"_",comps,"_comps_PLSDA_prediction.txt"),col.names=T,quote=F,sep="\t",row.names=F)
-
-
-    prediction$actual = sample.type[match(prediction$sample,sample.names)]
+    prediction$type = sample.type[match(prediction$sample,sample.names)]
+    write.table(prediction,paste0(output_folder,test_string,"_projected_onto_",train_string,"_",comps,"_comps_PLSDA_prediction.txt"),col.names=T,quote=F,sep="\t",row.names=F)
+    
+    
     print(table(prediction$prediction, prediction$actual))
   
   return(prediction)

@@ -11,7 +11,7 @@ PLSR_from_file_and_predict_second_dataset(file, file2, sample.names,
   savetype = ".png", w = 8, h = 6, legendname = "default", scale = F,
   plot_both = T, colpalette = NULL, shape.palette = NULL, ellipses = T,
   conf = 0.9, varimax = F, varimax.comp = 2, output_folder = "./",
-  TCGA = F)
+  TCGA = F, threshold = 3)
 }
 \arguments{
 \item{file}{file for X matirx}
