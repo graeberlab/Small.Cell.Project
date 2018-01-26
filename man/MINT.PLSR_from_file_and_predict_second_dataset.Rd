@@ -12,7 +12,7 @@ MINT.PLSR_from_file_and_predict_second_dataset(..., file2, sample.names,
   savetype = ".png", w = 8, h = 6, legendname = "default", scale = F,
   plot_both = T, colpalette = NULL, shape.palette = NULL, ellipses = T,
   conf = 0.9, varimax = F, varimax.comp = 2, output_folder = "./",
-  TCGA = F, study.train.names, study.test.names)
+  TCGA = F, study.train.names, study.test.names, threshold = 3)
 }
 \arguments{
 \item{file2}{file for test data matrix}
@@ -66,6 +66,8 @@ MINT.PLSR_from_file_and_predict_second_dataset(..., file2, sample.names,
 \item{study.train.names}{vector sample types  that are in group 1  in the training studies e.g. c("NEPC","CRPC") (max 2)}
 
 \item{study.test.names}{a string of the sample type that is in the test group , e.g. "PAAD"}
+
+\item{threshold}{threshold for predictions}
 
 \item{file}{file for X matirx}
 

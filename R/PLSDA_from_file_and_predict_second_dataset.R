@@ -16,15 +16,18 @@
 #' @param train_string string of training data to insert in file name of predicted scores
 #' @param test_string string of data being tested to insert in file name of predicted scores
 #' @param TCGA default is false, true if test samples are TCGA, removes normal samples
-#' 
+#' @param plot_both if true plots both training and test set in color
+#' @param colpalette allows you to put in a color palette of form c("#F87660", "#39B600",....etc) to manually assign colors
+#' @param shape.palette allows you to put in a shape palette of form c(1, 3,....etc) to manually assign shapes
 #' @importFrom mixOmics plsda plotIndiv
 #' 
 #' @export
 #'
 
 
-PLSDA_from_file_and_predict_second_dataset = function(file, file2, sample.names, sample.type, y.response, 
-                                                      comps = 3, scale = F, ind.names = F,output_folder="./",train_string="",test_string="",TCGA=F){
+PLSDA_from_file_and_predict_second_dataset = function(file, file2, sample.names, sample.type, y.response,comps = 3, scale = F, ind.names = F,
+                                                      output_folder="./",train_string="",test_string="",TCGA=F,plot_both = T, 
+                                                      colpalette = NULL, shape.palette = NULL){
   require(mixOmics)
   data = read.table(file, sep = "\t", header = T, stringsAsFactors = FALSE, 
                     quote = "")
@@ -57,6 +60,8 @@ PLSDA_from_file_and_predict_second_dataset = function(file, file2, sample.names,
               quote = F)
   write.table(as.data.frame(pls.fit$variates$X),paste0(output_folder,train_string,  "_PLSDA_XScores.txt"), sep = "\t", row.names = T, col.names=NA,
               quote = F)
+  
+
   rownames(data2) = data2[,1]
   t.data2 = data.frame(t(data2[,-1])) 
   
@@ -71,11 +76,74 @@ PLSDA_from_file_and_predict_second_dataset = function(file, file2, sample.names,
   colnames(prediction)= c("sample","prediction")
     prediction$type = sample.type[match(prediction$sample,sample.names)]
     write.table(prediction,paste0(output_folder,test_string,"_projected_onto_",train_string,"_",comps,"_comps_PLSDA_prediction.txt"),col.names=T,quote=F,sep="\t",row.names=F)
-    
-    
     print(table(prediction$prediction, prediction$actual))
-  
-  return(prediction)
+    prediction.graph= as.data.frame(pls.fit$variates$X)
+    prediction.graph$type = sample.type[match(rownames(prediction.graph),sample.names)]
+    
+    pc.pred <- ggplot(prediction.graph, aes_string(x = comp.x, y = comp.y)) + 
+      geom_point(size = I(2), aes(color = factor(type))) + 
+      theme(legend.position = "right", plot.title = element_text(size = 30), 
+            legend.text = element_text(size = 22), legend.title = element_text(size = 20), 
+            axis.title = element_text(size = 30), legend.background = element_rect(), 
+            axis.text.x = element_text(margin = margin(b = -2)), 
+            axis.text.y = element_text(margin = margin(l = -14))) + 
+      guides(color = guide_legend(title = "Type")) + labs(title = title) + 
+      theme_bw() + if (labels == TRUE) {
+        geom_text(data = prediction.graph, mapping = aes(label = (rownames(prediction.graph))), 
+                  check_overlap = TRUE, size = 2.3)
+      }
+    pc.pred
+    if (plot_both == T) {
+      comb = rbind(prediction.graph, x.variates)
+      pc.pred3 = ggplot(data = comb, aes_string(x = comp.x, 
+                                                y = comp.y), ) + geom_point(size = I(3), aes(color = factor(type), 
+                                                                                             shape = factor(type))) + theme(legend.position = "right", 
+                                                                                                                            plot.title = element_text(size = 30), legend.text = element_text(size = 22), 
+                                                                                                                            legend.title = element_text(size = 20), axis.title = element_text(size = 30), 
+                                                                                                                            legend.background = element_rect(), axis.text.x = element_text(margin = margin(b = -2)), 
+                                                                                                                            axis.text.y = element_text(margin = margin(l = -14))) + 
+        labs(title = title) + theme_bw() + if (labels == 
+                                               TRUE) {
+          geom_text(data = comb, mapping = aes(label = (rownames(comb))), 
+                    check_overlap = TRUE, size = 2.5)
+        }
+      if (!is.null(shape.palette)) {
+        pc.pred3 <- pc.pred3 + scale_shape_manual(legendname, 
+                                                  values = shape.palette)
+      }
+      if (!is.null(colpalette)) {
+        pc.pred3 <- pc.pred3 + scale_color_manual(legendname, 
+                                                  values = colpalette)
+      }
+      if (ellipses == T) {
+        pc.pred3 <- pc.pred3 + stat_ellipse(aes(color = factor(type)), 
+                                            level = conf)
+      }
+      if (saveplot == T) {
+        ggsave(paste0(output_folder, test_string, "_projected_onto_", 
+                      train_string, "_", comp.x, "_vs_", comp.y, savetype), 
+               dpi = 300, plot = pc.pred3, width = w, height = h)
+      }
+      pc.pred3
+    } 
+    
+    
+    else {
+      pc.pred = pc.pred + geom_point(data = x.variates, aes_string(x = comp.x,
+                                                                   y = comp.y)) + geom_point(size = I(1.3), aes(color = factor(type))) +
+        theme(legend.position = "right", plot.title = element_text(size = 30),
+              legend.text = element_text(size = 22), legend.title = element_text(size = 20),
+              axis.title = element_text(size = 30), legend.background = element_rect(),
+              axis.text.x = element_text(margin = margin(b = -2)),
+              axis.text.y = element_text(margin = margin(l = -14))) +
+        labs(title = title) + theme_bw()
+      if (saveplot == T) {
+        ggsave(paste0(output_folder, test_string, "_projected_onto_",
+                      train_string, "_", comp.x, "_vs_", comp.y, savetype),
+               dpi = 300, plot = pc.pred, width = w, height = h)
+      }
+      pc.pred
+    }
   
 }
 

@@ -6,7 +6,8 @@
 \usage{
 PLSDA_from_file_and_predict_second_dataset(file, file2, sample.names,
   sample.type, y.response, comps = 3, scale = F, ind.names = F,
-  output_folder = "./", train_string = "", test_string = "", TCGA = F)
+  output_folder = "./", train_string = "", test_string = "", TCGA = F,
+  plot_both = T, colpalette = NULL, shape.palette = NULL)
 }
 \arguments{
 \item{file}{file for X matirx}
@@ -28,6 +29,12 @@ PLSDA_from_file_and_predict_second_dataset(file, file2, sample.names,
 \item{test_string}{string of data being tested to insert in file name of predicted scores}
 
 \item{TCGA}{default is false, true if test samples are TCGA, removes normal samples}
+
+\item{plot_both}{if true plots both training and test set in color}
+
+\item{colpalette}{allows you to put in a color palette of form c("#F87660", "#39B600",....etc) to manually assign colors}
+
+\item{shape.palette}{allows you to put in a shape palette of form c(1, 3,....etc) to manually assign shapes}
 
 \item{response.values}{Vector of response values in same order matching sample.names}
 

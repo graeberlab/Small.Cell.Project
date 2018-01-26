@@ -32,6 +32,7 @@
 #' @param varimax.comp # of varimax components, kind of hacky, keep this # the same as # of comps. Will fix later.
 #' @param output_folder the folder to output to, default is ./ i.e. current folder
 #' @param TCGA predicted files are from TCGA, barcodes separated by periods, so remove normal samples, default is FALSE
+#' @param threshold threshold for predictions
 #'
 #' @importFrom mixOmics pls
 #' @export
@@ -42,7 +43,7 @@ MINT.PLSR_from_file_and_predict_second_dataset<-function (..., file2 ,sample.nam
                                                          comps = 2, labels = F, saveplot = T, savetype = ".png", w = 8, 
                                                          h = 6, legendname = "default", scale = F, plot_both = T, 
                                                          colpalette = NULL, shape.palette = NULL, ellipses = T, conf = 0.9, 
-                                                         varimax = F, varimax.comp = 2, output_folder = "./", TCGA = F,study.train.names,study.test.names) {
+                                                         varimax = F, varimax.comp = 2, output_folder = "./", TCGA = F,study.train.names,study.test.names,threshold=3) {
   require(mixOmics)
   datasets=list(...)
   list_of_dataframes<-lapply(datasets, read.table,sep = "\t",header=T,stringsAsFactors = FALSE,quote="")
@@ -121,6 +122,14 @@ MINT.PLSR_from_file_and_predict_second_dataset<-function (..., file2 ,sample.nam
               paste0(output_folder, test_string, "_projected_onto_", 
                      train_string, "_MINT.PLSR_predicted.scores.txt"), sep = "\t", 
               row.names = F, quote = F)
+  prediction.to.write=scale(prediction)
+  prediction.to.write=as.data.frame(prediction.to.write)
+  prediction.to.write$type = sample.type[match(rownames(prediction.to.write),sample.names)]
+  prediction.to.write$prediction =ifelse(prediction.to.write$comp.1 >=threshold, 1,0)
+  write.table(prediction.to.write,paste0(output_folder,test_string,"_projected_onto_",train_string,"_",comps,"_comps_MINT.PLSR_prediction.txt"),col.names=NA,quote=F,sep="\t",row.names=T)
+  
+  
+  
   prediction$type = sample.type2[match(rownames(prediction), 
                                        sample.names2)]
   pc.pred <- ggplot(prediction, aes_string(x = comp.x, y = comp.y)) + 

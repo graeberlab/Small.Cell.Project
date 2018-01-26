@@ -12,8 +12,8 @@ MINT.PLSDA_from_file_and_predict_second_dataset(..., file2, study.names,
   saveplot = T, savetype = ".png", w = 8, h = 6,
   legendname = "default", scale = F, plot_both = T, colpalette = NULL,
   shape.palette = NULL, ellipses = T, conf = 0.9, varimax = F,
-  varimax.comp = 2, output_folder = "./", TCGA = F, study.train.names,
-  study.test.names)
+  varimax.comp = 2, threshold = 3, output_folder = "./", TCGA = F,
+  study.train.names, study.test.names)
 }
 \arguments{
 \item{file2}{file for test data matrix}

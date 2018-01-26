@@ -6,6 +6,7 @@
 #' @param anno.file Annotation file, first column is sample names, 2nd is annotation
 #' @param comps number of components to compute
 #' @param output_folder output folder
+#' @param TCGA are these tcga cancer samples
 #' @param train_string string of training data to insert in file name of predicted scores
 #' @param test_string string of data being tested to insert in file name of predicted scores
 #' @param train_pattern annotation type of main group in your comparison ,taken from 2nd column in anno.
@@ -17,7 +18,7 @@
 
 
 
-predict_MINT.PLSR_graph=function(...,test_files_folder,anno.file,output_folder="./",train_string="",test_pattern="",comps=3,study.train.names,y.response){
+predict_MINT.PLSR_graph=function(...,test_files_folder,anno.file,output_folder="./",train_string="",test_pattern="",comps=3,study.train.names,y.response,TCGA=T){
   
   all.files.short.path=list.files(test_files_folder,pattern=test_pattern,full.names=F)
   all.files.long.path=list.files(test_files_folder,pattern=test_pattern,full.names=T)
@@ -31,7 +32,7 @@ predict_MINT.PLSR_graph=function(...,test_files_folder,anno.file,output_folder="
                                               sample.names2 = human.info$sample,sample.type2 =  factor(human.info$type),
                                               y.response =  y.response,
                                               test_string = nam,comps = comps, scale = F,output_folder=output_folder,train_string=train_string,
-                                              TCGA=T,study.train.names=study.train.names,study.test.names=nam,saveplot=T,plot_both=T,colpalette = cbbPalette4,shape.palette=shape.palt)
+                                              TCGA=TCGA,study.train.names=study.train.names,study.test.names=nam,saveplot=T,plot_both=T,colpalette = cbbPalette5,shape.palette=shape.palt3)
     print(paste0("Cancer ",nam," is done!"))
   }
 }

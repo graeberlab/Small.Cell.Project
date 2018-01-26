@@ -35,6 +35,7 @@
 #' @importFrom mixOmics pls
 #' @export
 #'
+
 PLSR_from_file_and_predict_second_dataset=function (file, file2, sample.names, sample.type, y.response, 
           sample.names2 = NULL, sample.type2 = NULL, train_string, 
           test_string, title = "PLSR", comp.x = "comp.1", comp.y = "comp.2", 
@@ -113,7 +114,7 @@ PLSR_from_file_and_predict_second_dataset=function (file, file2, sample.names, s
   prediction.to.write=as.data.frame(prediction.to.write)
   prediction.to.write$type = sample.type[match(rownames(prediction.to.write),sample.names)]
   prediction.to.write$prediction =ifelse(prediction.to.write$comp.1 >=threshold, 1,0)
-  write.table(prediction.to.write,paste0(output_folder,test_string,"_projected_onto_",train_string,"_",comps,"_comps_PLSR_prediction.txt"),col.names=T,quote=F,sep="\t",row.names=F)
+  write.table(prediction.to.write,paste0(output_folder,test_string,"_projected_onto_",train_string,"_",comps,"_comps_PLSR_prediction.txt"),col.names=NA,quote=F,sep="\t",row.names=T)
   
   prediction$type = sample.type[match(rownames(prediction),sample.names)]
   

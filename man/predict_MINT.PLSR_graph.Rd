@@ -7,7 +7,7 @@ Predicts classifications of test dataset and writes out predictions}
 \usage{
 predict_MINT.PLSR_graph(..., test_files_folder, anno.file,
   output_folder = "./", train_string = "", test_pattern = "", comps = 3,
-  study.train.names, y.response)
+  study.train.names, y.response, TCGA = T)
 }
 \arguments{
 \item{test_files_folder}{folder of test files}
@@ -19,6 +19,8 @@ predict_MINT.PLSR_graph(..., test_files_folder, anno.file,
 \item{train_string}{string of training data to insert in file name of predicted scores}
 
 \item{comps}{number of components to compute}
+
+\item{TCGA}{are these tcga cancer samples}
 
 \item{prediction_file}{file  with training data features rows , genes columns, features are in column 1}
 
