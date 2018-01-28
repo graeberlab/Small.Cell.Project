@@ -7,7 +7,7 @@ Predicts classifications of test dataset and writes out predictions}
 \usage{
 predict_MINT.PLSR_graph(..., test_files_folder, anno.file,
   output_folder = "./", train_string = "", test_pattern = "", comps = 3,
-  study.train.names, y.response, TCGA = T)
+  study.train.names, y.response, TCGA = T, varimax = F)
 }
 \arguments{
 \item{test_files_folder}{folder of test files}

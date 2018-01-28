@@ -6,8 +6,10 @@
 \usage{
 PLSDA_from_file_and_predict_second_dataset(file, file2, sample.names,
   sample.type, y.response, comps = 3, scale = F, ind.names = F,
-  output_folder = "./", train_string = "", test_string = "", TCGA = F,
-  plot_both = T, colpalette = NULL, shape.palette = NULL)
+  output_folder = "./", train_string = "", test_string = "",
+  comp.x = "comp.1", comp.y = "comp.2", TCGA = F, plot_both = T,
+  colpalette = NULL, shape.palette = NULL, labels = F,
+  legendname = "default")
 }
 \arguments{
 \item{file}{file for X matirx}

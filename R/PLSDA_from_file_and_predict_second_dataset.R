@@ -26,8 +26,8 @@
 
 
 PLSDA_from_file_and_predict_second_dataset = function(file, file2, sample.names, sample.type, y.response,comps = 3, scale = F, ind.names = F,
-                                                      output_folder="./",train_string="",test_string="",TCGA=F,plot_both = T, 
-                                                      colpalette = NULL, shape.palette = NULL){
+                                                      output_folder="./",train_string="",test_string="",comp.x = "comp.1", comp.y = "comp.2",TCGA=F,plot_both = T, 
+                                                      colpalette = NULL, shape.palette = NULL,labels = F,legendname = "default"){
   require(mixOmics)
   data = read.table(file, sep = "\t", header = T, stringsAsFactors = FALSE, 
                     quote = "")
@@ -56,13 +56,29 @@ PLSDA_from_file_and_predict_second_dataset = function(file, file2, sample.names,
   y.response = as.factor(y.response)
   pls.fit = mixOmics::plsda(X = t.data, Y = y.response, scale = scale, ncomp = comps)
   plotIndiv(pls.fit, legend = T,ind.names = ind.names)
-  write.table(as.data.frame(pls.fit$loadings$X),paste0(output_folder,train_string,  "_PLSDA_Xloadings.txt"), sep = "\t", row.names = T,col.names=NA, 
+  x.variates = data.frame(pls.fit$variates$X)
+  x.loadings = data.frame(pls.fit$loadings$X)
+  
+  
+  write.table(x.loadings,paste0(output_folder,train_string,  "_PLSDA_Xloadings.txt"), sep = "\t", row.names = T,col.names=NA, 
               quote = F)
-  write.table(as.data.frame(pls.fit$variates$X),paste0(output_folder,train_string,  "_PLSDA_XScores.txt"), sep = "\t", row.names = T, col.names=NA,
+  write.table(x.variates,paste0(output_folder,train_string,  "_PLSDA_XScores.txt"), sep = "\t", row.names = T, col.names=NA,
               quote = F)
   
-
-  rownames(data2) = data2[,1]
+  x.variates$type = sample.type[match(rownames(x.variates),sample.names)]
+  pc.pred = ggplot(data = x.variates, aes_string(x = comp.x, 
+                                                 y = comp.y)) + geom_point(size = I(2), aes(color = factor(type))) + 
+    theme(legend.position = "right", plot.title = element_text(size = 30), 
+          legend.text = element_text(size = 22), legend.title = element_text(size = 20), 
+          axis.title = element_text(size = 30), legend.background = element_rect(), 
+          axis.text.x = element_text(margin = margin(b = -2)), 
+          axis.text.y = element_text(margin = margin(l = -14))) + 
+    labs(title = title) + theme_bw() + if (labels == TRUE) {
+      geom_text(data = x.variates, mapping = aes(label = (rownames(x.variates))), 
+                check_overlap = TRUE, size = 2.5)
+    }
+  pc.pred
+  rownames(data2) = make.names(data2[, 1], unique = TRUE)
   t.data2 = data.frame(t(data2[,-1])) 
   
   test.predict <- predict(pls.fit, t.data2, method = "max.dist")
@@ -70,17 +86,19 @@ PLSDA_from_file_and_predict_second_dataset = function(file, file2, sample.names,
   colnames(test.predict.scores)[1]="sample"
   colnames(test.predict.scores)[2:ncol(test.predict.scores)]=  paste0(rep( "comp.",(ncol(test.predict.scores)-1)),1:(ncol(test.predict.scores)-1))
   write.table(test.predict.scores,paste0(output_folder,test_string,"_projected_onto_",train_string,"_",comps,"_comps_PLSDA_Xscores.txt"),col.names=T,quote=F,sep="\t",row.names=F)
+  test.predict.scores$type = sample.type[match(rownames(test.predict.scores),sample.names)]
+  
+  
   
   prediction <- as.data.frame(test.predict$class$max.dist[, comps])
   prediction <- prediction %>% tibble::rownames_to_column()
   colnames(prediction)= c("sample","prediction")
-    prediction$type = sample.type[match(prediction$sample,sample.names)]
-    write.table(prediction,paste0(output_folder,test_string,"_projected_onto_",train_string,"_",comps,"_comps_PLSDA_prediction.txt"),col.names=T,quote=F,sep="\t",row.names=F)
-    print(table(prediction$prediction, prediction$actual))
-    prediction.graph= as.data.frame(pls.fit$variates$X)
-    prediction.graph$type = sample.type[match(rownames(prediction.graph),sample.names)]
+  prediction$type = sample.type[match(prediction$sample,sample.names)]
+  write.table(prediction,paste0(output_folder,test_string,"_projected_onto_",train_string,"_",comps,"_comps_PLSDA_prediction.txt"),col.names=T,quote=F,sep="\t",row.names=F)
+  print(table(prediction$prediction, prediction$type))
+  
     
-    pc.pred <- ggplot(prediction.graph, aes_string(x = comp.x, y = comp.y)) + 
+    pc.pred <- ggplot(test.predict.scores, aes_string(x = comp.x, y = comp.y)) + 
       geom_point(size = I(2), aes(color = factor(type))) + 
       theme(legend.position = "right", plot.title = element_text(size = 30), 
             legend.text = element_text(size = 22), legend.title = element_text(size = 20), 
@@ -89,12 +107,12 @@ PLSDA_from_file_and_predict_second_dataset = function(file, file2, sample.names,
             axis.text.y = element_text(margin = margin(l = -14))) + 
       guides(color = guide_legend(title = "Type")) + labs(title = title) + 
       theme_bw() + if (labels == TRUE) {
-        geom_text(data = prediction.graph, mapping = aes(label = (rownames(prediction.graph))), 
+        geom_text(data = test.predict.scores, mapping = aes(label = (rownames(test.predict.scores))), 
                   check_overlap = TRUE, size = 2.3)
       }
     pc.pred
     if (plot_both == T) {
-      comb = rbind(prediction.graph, x.variates)
+      comb = rbind(test.predict.scores, x.variates)
       pc.pred3 = ggplot(data = comb, aes_string(x = comp.x, 
                                                 y = comp.y), ) + geom_point(size = I(3), aes(color = factor(type), 
                                                                                              shape = factor(type))) + theme(legend.position = "right", 

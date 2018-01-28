@@ -1,4 +1,4 @@
-#' Partial Least Squares and predict second dataset
+#' PCA and predict second dataset
 #'
 #' Builds PLS model from training dataset and predicts second dataset
 #' Writes out predicted.scores of the second dataset
@@ -36,25 +36,26 @@
 #' @export
 #'
 
-PLSR_from_file_and_predict_second_dataset=function (file, file2, sample.names, sample.type, y.response, 
-          sample.names2 = NULL, sample.type2 = NULL, train_string, 
-          test_string, title = "PLSR", comp.x = "comp.1", comp.y = "comp.2", 
-          comps = 2, labels = F, saveplot = T, savetype = ".png", w = 8, 
-          h = 6, legendname = "default", scale = F, plot_both = T, 
-          colpalette = NULL, shape.palette = NULL, ellipses = T, conf = 0.9, 
-          varimax = F, varimax.comp = 2, output_folder = "./",TCGA=F,threshold=3) {
+PCA_from_file_and_predict_second_dataset=function (file, file2, sample.names, sample.type, y.response, 
+                                                    sample.names2 = NULL, sample.type2 = NULL, train_string, 
+                                                    test_string, title = "PLSR", comp.x = "PC1", comp.y = "PC2", 
+                                                    comps = 2, labels = F, saveplot = T, savetype = ".png", w = 8, 
+                                                    h = 6, legendname = "default", scale = F, center=T, plot_both = T, 
+                                                    colpalette = NULL, shape.palette = NULL, ellipses = T, conf = 0.9, 
+                                                    varimax = F, varimax.comp = 2, output_folder = "./",TCGA=F,threshold=3,rank=3,rotate=F) {
   require(mixOmics)
-  data = read.table(file, sep = "\t", header = T, stringsAsFactors = FALSE, 
-                    quote = "")
-  data = data[rowSums((data[, -1] == 0)) < ncol(data[-1]), 
-              ]
-  data2 = read.table(file2, sep = "\t", header = T, stringsAsFactors = FALSE, 
-                     quote = "")
+  
+
+  data = read.table(file, sep = "\t", header = T, stringsAsFactors = FALSE,   quote = "")
+  data = data[rowSums((data[, -1] == 0)) < ncol(data[-1]), ]
+  data2 = read.table(file2, sep = "\t", header = T, stringsAsFactors = FALSE, quote = "")
+  
+  
   if(TCGA == T){
-  temp_name=colnames(data2)[1]
-  cancer_samples=which(as.numeric(sapply(colnames(data2)[-1],function(x) strsplit(x,"\\.")[[1]][4])) <= 9) 
-  data2=cbind(data2[,1],data2[,-1][,cancer_samples])
-  colnames(data2)[1]=temp_name
+    temp_name=colnames(data2)[1]
+    cancer_samples=which(as.numeric(sapply(colnames(data2)[-1],function(x) strsplit(x,"\\.")[[1]][4])) <= 9) 
+    data2=cbind(data2[,1],data2[,-1][,cancer_samples])
+    colnames(data2)[1]=temp_name
   }
   data = data[!duplicated(data[, 1]), ]
   data2 = data2[!duplicated(data2[, 1]), ]
@@ -65,24 +66,46 @@ PLSR_from_file_and_predict_second_dataset=function (file, file2, sample.names, s
   data2 = data2[order(data2[, 1]), ]
   rownames(data) = make.names(data[, 1], unique = TRUE)
   t.data = data.frame(t(data[, -1]))
-  y.response = (data.frame(y.response)[match(rownames(t.data), 
-                                             as.character(sample.names)), ])
-  y.response = as.matrix(y.response)
-  pls.fit = pls(X = t.data, Y = y.response, scale = scale, 
-                ncomp = comps)
+  pca<-prcomp(t.data,scale=scale,center=center,rank.=rank);
+  x.variates=as.data.frame(pca$x)
+ # x.variates=cbind("Sample"=rownames(x.variates),x.variates)
+  x.loadings=pca$rotation
+  #pca_loadings=cbind("Loading"=rownames(pca_loadings),pca_loadings)#if genenames in rownames
+  #x.loadings=cbind("Loading"=data[,1],x.loadings)#if genenames not in rownames
+  pca_evalues=pca$sdev
   
-  
-  x.variates = data.frame(pls.fit$variates$X)
-  x.loadings = data.frame(pls.fit$loadings$X)
   if (varimax == T) {
     rotation = varimax(as.matrix(x.loadings[, c(1:(varimax.comp))]), 
                        normalize = F)
     scores <- as.matrix(x.variates[, 1:(varimax.comp)]) %*% 
       rotation$rotmat
     scores = as.data.frame(scores)
-    colnames(scores) = colnames(x.variates)
+    colnames(scores)[1:ncol(scores)]=colnames(x.variates)[1:ncol(scores)]
     x.variates = scores
   }
+  
+  if(rotate==T){
+    temp.names=colnames(x.variates)
+    temp.samps=rownames(x.variates)
+    x.variates=as.data.frame(cbind(-1*x.variates[,1],x.variates[,-1]))
+    colnames(x.variates)=temp.names
+    rownames(x.variates)=temp.samps
+  }
+
+  
+  name=sub(".txt","",file)
+  savename=paste(name,"_prcomp_scores.txt",sep='');
+  write.table(x.variates,savename,sep='\t',row.names=FALSE,quote=FALSE);
+  savename=paste(name,"_prcomp_loadings.txt",sep='');
+  write.table(x.loadings,savename,sep='\t',row.names=FALSE,quote=FALSE);
+  savename=paste(name,"_prcomp_sdev.txt",sep='');
+  write.table(pca_evalues,savename,sep='\t',row.names=FALSE,quote=FALSE);
+  print(summary(pca))
+  screeplot(pca)
+  
+ 
+  
+  
   x.variates$type = sample.type[match(rownames(x.variates), 
                                       sample.names)]
   pc.pred = ggplot(data = x.variates, aes_string(x = comp.x, 
@@ -97,8 +120,20 @@ PLSR_from_file_and_predict_second_dataset=function (file, file2, sample.names, s
                 check_overlap = TRUE, size = 2.5)
     }
   pc.pred
+  
+  
+  
   rownames(data2) = make.names(data2[, 1], unique = TRUE)
   t.data2 = data.frame(t(data2[, -1]))
+  
+ 
+  
+  rotated.data2 = scale(t.data2, pca$center, pca$scale) %*% pca$rotation 
+  
+  
+  
+  
+  
   test.predict <- predict(pls.fit, t.data2)
   prediction <- as.data.frame(test.predict$variates)
   colnames(prediction) <- colnames(x.variates)[-ncol(x.variates)]
@@ -128,25 +163,25 @@ PLSR_from_file_and_predict_second_dataset=function (file, file2, sample.names, s
   if(legend==F) {
     
     
-  pc.pred2<- pc.pred2 +theme(legend.position = "none", plot.title = element_text(size = 30), 
-          axis.title = element_text(size = 30), legend.background = element_rect(), 
-          axis.text.x = element_text(margin = margin(b = -2)), 
-          axis.text.y = element_text(margin = margin(l = -14))) + 
-          labs(title = title) + 
-    theme_bw()  + if (labels == TRUE) {
-      geom_text(data = prediction, mapping = aes(label = (rownames(prediction))), 
-                check_overlap = TRUE, size = 2.3)
-    }} else{
-      pc.pred2<- pc.pred2 +theme(legend.position = "right", plot.title = element_text(size = 30), 
-                                 legend.text = element_text(size = 22), legend.title = element_text(size = 20), 
-                                 axis.title = element_text(size = 30), legend.background = element_rect(), 
-                                 axis.text.x = element_text(margin = margin(b = -2)), 
-                                 axis.text.y = element_text(margin = margin(l = -14))) + 
-        guides(color = guide_legend(title = "Type")) + labs(title = title) + 
-        theme_bw()  + if (labels == TRUE) {
-          geom_text(data = prediction, mapping = aes(label = (rownames(prediction))), 
-                    check_overlap = TRUE, size = 2.3)
-        }}
+    pc.pred2<- pc.pred2 +theme(legend.position = "none", plot.title = element_text(size = 30), 
+                               axis.title = element_text(size = 30), legend.background = element_rect(), 
+                               axis.text.x = element_text(margin = margin(b = -2)), 
+                               axis.text.y = element_text(margin = margin(l = -14))) + 
+      labs(title = title) + 
+      theme_bw()  + if (labels == TRUE) {
+        geom_text(data = prediction, mapping = aes(label = (rownames(prediction))), 
+                  check_overlap = TRUE, size = 2.3)
+      }} else{
+        pc.pred2<- pc.pred2 +theme(legend.position = "right", plot.title = element_text(size = 30), 
+                                   legend.text = element_text(size = 22), legend.title = element_text(size = 20), 
+                                   axis.title = element_text(size = 30), legend.background = element_rect(), 
+                                   axis.text.x = element_text(margin = margin(b = -2)), 
+                                   axis.text.y = element_text(margin = margin(l = -14))) + 
+          guides(color = guide_legend(title = "Type")) + labs(title = title) + 
+          theme_bw()  + if (labels == TRUE) {
+            geom_text(data = prediction, mapping = aes(label = (rownames(prediction))), 
+                      check_overlap = TRUE, size = 2.3)
+          }}
   pc.pred2
   
   

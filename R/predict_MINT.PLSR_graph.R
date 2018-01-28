@@ -18,7 +18,7 @@
 
 
 
-predict_MINT.PLSR_graph=function(...,test_files_folder,anno.file,output_folder="./",train_string="",test_pattern="",comps=3,study.train.names,y.response,TCGA=T){
+predict_MINT.PLSR_graph=function(...,test_files_folder,anno.file,output_folder="./",train_string="",test_pattern="",comps=3,study.train.names,y.response,TCGA=T,varimax=F){
   
   all.files.short.path=list.files(test_files_folder,pattern=test_pattern,full.names=F)
   all.files.long.path=list.files(test_files_folder,pattern=test_pattern,full.names=T)
@@ -32,7 +32,8 @@ predict_MINT.PLSR_graph=function(...,test_files_folder,anno.file,output_folder="
                                               sample.names2 = human.info$sample,sample.type2 =  factor(human.info$type),
                                               y.response =  y.response,
                                               test_string = nam,comps = comps, scale = F,output_folder=output_folder,train_string=train_string,
-                                              TCGA=TCGA,study.train.names=study.train.names,study.test.names=nam,saveplot=T,plot_both=T,colpalette = cbbPalette5,shape.palette=shape.palt3)
+                                              TCGA=TCGA,study.train.names=study.train.names,study.test.names=nam,saveplot=T,plot_both=T,colpalette = cbbPalette5,
+                                              shape.palette=shape.palt3,varimax.comp = comps,varimax=varimax)
     print(paste0("Cancer ",nam," is done!"))
   }
 }
