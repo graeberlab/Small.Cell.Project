@@ -42,8 +42,7 @@ PCA_from_file_and_predict_second_dataset=function (file, file2, sample.names, sa
                                                     comps = 2, labels = F, saveplot = T, savetype = ".png", w = 8, 
                                                     h = 6, legendname = "default", scale = F, center=T, plot_both = T, 
                                                     colpalette = NULL, shape.palette = NULL, ellipses = T, conf = 0.9, 
-                                                    varimax = F, varimax.comp = 2, output_folder = "./",TCGA=F,threshold=3,rank=3,rotate=F) {
-  require(mixOmics)
+                                                    varimax = F, varimax.comp = 2, output_folder = "./",TCGA=F,threshold=3,rank=3,rotate=F,do.legend=T) {
   
 
   data = read.table(file, sep = "\t", header = T, stringsAsFactors = FALSE,   quote = "")
@@ -133,41 +132,51 @@ PCA_from_file_and_predict_second_dataset=function (file, file2, sample.names, sa
   
   
   
-  
-  test.predict <- predict(pls.fit, t.data2)
-  prediction <- as.data.frame(test.predict$variates)
-  colnames(prediction) <- colnames(x.variates)[-ncol(x.variates)]
   if (varimax == T) {
-    predit <- as.matrix(prediction[, 1:(varimax.comp)]) %*% 
+    temp_names=colnames(rotated.data2)
+    temp.samps=rownames(rotated.data2)
+    rotated.data2 <- as.matrix(rotated.data2[, 1:(varimax.comp)]) %*% 
       rotation$rotmat
-    colnames(predit) = colnames(prediction)
-    prediction = as.data.frame(predit)
+    colnames(rotated.data2) = temp.names
+    rownames(rotated.data2) = temp.samps
+    rotated.data2 = as.data.frame(rotated.data2)
   }
-  write.table(cbind(Sample = rownames(prediction), (prediction)), 
+  
+  if(rotate==T){
+    temp.names=colnames(rotated.data2)
+    temp.samps=rownames(rotated.data2)
+    rotated.data2=as.data.frame(cbind(-1*rotated.data2[,1],rotated.data2[,-1]))
+    colnames(rotated.data2)=temp.names
+    rownames(rotated.data2)=temp.samps
+  }
+  
+  
+  write.table(cbind(Sample = rownames(rotated.data2), (rotated.data2)), 
               paste0(output_folder, test_string, "_projected_onto_", 
-                     train_string, "_PLSR_predicted.scores.txt"), sep = "\t", 
+                     train_string, "_PCA_predicted.scores.txt"), sep = "\t", 
               row.names = F, quote = F)
-  prediction.to.write=scale(prediction)
+  
+  prediction.to.write=scale(rotated.data2)
   prediction.to.write=as.data.frame(prediction.to.write)
   prediction.to.write$type = sample.type[match(rownames(prediction.to.write),sample.names)]
-  prediction.to.write$prediction =ifelse(prediction.to.write$comp.1 >=threshold, 1,0)
-  write.table(prediction.to.write,paste0(output_folder,test_string,"_projected_onto_",train_string,"_",comps,"_comps_PLSR_prediction.txt"),col.names=NA,quote=F,sep="\t",row.names=T)
+  prediction.to.write$prediction =ifelse(prediction.to.write$PC1 >=threshold, 1,0)
+  write.table(prediction.to.write,paste0(output_folder,test_string,"_projected_onto_",train_string,"_",comps,"_comps_PCA_prediction.txt"),col.names=NA,quote=F,sep="\t",row.names=T)
   
-  prediction$type = sample.type[match(rownames(prediction),sample.names)]
+  rotated.data2$type = sample.type[match(rownames(rotated.data2),sample.names)]
   
   
   
-  pc.pred2 <- ggplot(prediction, aes_string(x = comp.x, y = comp.y)) + 
+  pc.pred2 <- ggplot(rotated.data2, aes_string(x = comp.x, y = comp.y)) + 
     geom_point(size = I(2), aes(color = factor(type)))
   
-  if(legend==F) {
+  if(do.legend==F) {
     
     
-    pc.pred2<- pc.pred2 +theme(legend.position = "none", plot.title = element_text(size = 30), 
+    pc.pred2<- pc.pred2 +theme( legend.position = "none",plot.title = element_text(size = 30), 
                                axis.title = element_text(size = 30), legend.background = element_rect(), 
                                axis.text.x = element_text(margin = margin(b = -2)), 
                                axis.text.y = element_text(margin = margin(l = -14))) + 
-      labs(title = title) + 
+      labs(title = title) + guides(fill=FALSE)+
       theme_bw()  + if (labels == TRUE) {
         geom_text(data = prediction, mapping = aes(label = (rownames(prediction))), 
                   check_overlap = TRUE, size = 2.3)
@@ -186,7 +195,7 @@ PCA_from_file_and_predict_second_dataset=function (file, file2, sample.names, sa
   
   
   if (plot_both == T) {
-    comb = rbind(prediction, x.variates)
+    comb = rbind(rotated.data2, x.variates)
     pc.pred3 = ggplot(data = comb, aes_string(x = comp.x, 
                                               y = comp.y), ) + geom_point(size = I(3), aes(color = factor(type), 
                                                                                            shape = factor(type))) + theme(legend.position = "right", 

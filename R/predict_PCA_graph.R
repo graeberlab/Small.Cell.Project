@@ -1,4 +1,4 @@
-#' Predict all files in a folder using PLSR of a training dataset, file names have to be of form name_.......txt
+#' Predict all files in a folder using PCA of a training dataset, file names have to be of form name_.......txt
 #' Predicts classifications of test dataset and writes out predictions
 #'
 #' @param prediction_file file  with training data features rows , genes columns, features are in column 1
@@ -17,7 +17,7 @@
 
 
 
-predict_PCA_graph=function(prediction_file,test_files_folder,anno.file,output_folder="./",train_string="",test_pattern="",train_pattern="",comps=3){
+predict_PCA_graph=function(prediction_file,test_files_folder,anno.file,output_folder="./",train_string="",test_pattern="",comps=3,rotate=F,varimax=F,varimax.comp=2,shape.palette=NULL){
   
   all.files.short.path=list.files(test_files_folder,pattern=test_pattern,full.names=F)
   all.files.long.path=list.files(test_files_folder,pattern=test_pattern,full.names=T)
@@ -28,9 +28,9 @@ predict_PCA_graph=function(prediction_file,test_files_folder,anno.file,output_fo
     PCA_from_file_and_predict_second_dataset(prediction_file,
                                               all.files.long.path[i],
                                               sample.names= human.info$sample, sample.type = factor(human.info$type),
-                                              y.response =  ifelse(human.info$type==train_pattern,1,0),
                                               sample.names2 = human.info$sample,sample.type2 =  factor(human.info$type), test_string = nam,
-                                              "Projection", comps = comps, scale = F, labels =F,output_folder=output_folder,train_string=train_string,TCGA=T)
+                                              "Projection", comps = comps, scale = F, labels =F,output_folder=output_folder,train_string=train_string,TCGA=T,rotate=rotate,varimax=varimax,varimax.comp=varimax.comp,
+                                             shape.palette = shape.palette)
     print(paste0("Cancer ",nam," is done!"))
   }
 }
