@@ -6,10 +6,12 @@
 \title{create tcga boxplots}
 \usage{
 do_full_boxplot_RNA(file_pattern, tcga_location, crpc_file, nepc_file,
-  sclc_file, output_folder)
+  sclc_file, output_folder, comp.x = "comp.1", components = 3,
+  threshold = 3)
 
 do_full_boxplot_RNA(file_pattern, tcga_location, crpc_file, nepc_file,
-  sclc_file, output_folder)
+  sclc_file, output_folder, comp.x = "comp.1", components = 3,
+  threshold = 3)
 }
 \arguments{
 \item{tcga_location}{location of predicted files of tcga}
