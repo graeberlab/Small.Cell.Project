@@ -42,7 +42,7 @@ PLSR_from_file_and_predict_second_dataset=function (file, file2, sample.names, s
           comps = 2, labels = F, saveplot = T, savetype = ".png", w = 8, 
           h = 6, legendname = "default", scale = F, plot_both = T, 
           colpalette = NULL, shape.palette = NULL, ellipses = T, conf = 0.9, 
-          varimax = F, varimax.comp = 2, output_folder = "./",TCGA=F,threshold=3) {
+          varimax = F, varimax.comp = 2, output_folder = "./",TCGA=F,threshold=3,legend=F) {
   require(mixOmics)
   data = read.table(file, sep = "\t", header = T, stringsAsFactors = FALSE, 
                     quote = "")
@@ -133,7 +133,7 @@ PLSR_from_file_and_predict_second_dataset=function (file, file2, sample.names, s
           axis.text.x = element_text(margin = margin(b = -2)), 
           axis.text.y = element_text(margin = margin(l = -14))) + 
           labs(title = title) + 
-    theme_bw()  + if (labels == TRUE) {
+          if (labels == TRUE) {
       geom_text(data = prediction, mapping = aes(label = (rownames(prediction))), 
                 check_overlap = TRUE, size = 2.3)
     }} else{
@@ -150,36 +150,49 @@ PLSR_from_file_and_predict_second_dataset=function (file, file2, sample.names, s
   pc.pred2
   
   
+  
+  
+  ggsave(paste0(output_folder, test_string, "_projected_onto_", 
+                train_string, "_projection_only_", comp.x, "_vs_", comp.y, savetype), 
+         dpi = 300, plot = pc.pred2, width = w, height = h)
+  
+  
   if (plot_both == T) {
     comb = rbind(prediction, x.variates)
-    pc.pred3 = ggplot(data = comb, aes_string(x = comp.x, 
-                                              y = comp.y), ) + geom_point(size = I(3), aes(color = factor(type), 
-                                                                                           shape = factor(type))) + theme(legend.position = "right", 
-                                                                                                                          plot.title = element_text(size = 30), legend.text = element_text(size = 22), 
-                                                                                                                          legend.title = element_text(size = 20), axis.title = element_text(size = 30), 
-                                                                                                                          legend.background = element_rect(), axis.text.x = element_text(margin = margin(b = -2)), 
-                                                                                                                          axis.text.y = element_text(margin = margin(l = -14))) + labs(title = title) + theme_bw() + 
+    if(legend==F) {
+      pc.pred3 = ggplot(data = comb, aes_string(x = comp.x,  y = comp.y), ) + geom_point(size = I(3), aes(color = factor(type),shape = factor(type))) +
+        theme(legend.position = "none",  plot.title = element_text(size = 30), legend.text = element_text(size = 22),legend.title = element_text(size = 20), axis.title = element_text(size = 30), 
+        legend.background = element_rect(), axis.text.x = element_text(margin = margin(b = -2)),axis.text.y = element_text(margin = margin(l = -14))) + 
+        labs(title = title) 
+
+    } else{
+    pc.pred3 = ggplot(data = comb, aes_string(x = comp.x,  y = comp.y), ) + geom_point(size = I(3), aes(color = factor(type), shape = factor(type))) + 
+    theme(legend.position = "right", plot.title = element_text(size = 30), legend.text = element_text(size = 22), legend.title = element_text(size = 20), axis.title = element_text(size = 30), 
+    legend.background = element_rect(), axis.text.x = element_text(margin = margin(b = -2)), axis.text.y = element_text(margin = margin(l = -14))) + 
+      labs(title = title) + theme_bw() 
+      }
+      
+
       if (labels ==  TRUE) {
-        geom_text(data = comb, mapping = aes(label = (rownames(comb))), 
+       pc.pred3<-pc.pred3 +geom_text(data = comb, mapping = aes(label = (rownames(comb))), 
                   check_overlap = TRUE, size = 2.5)
       }
-    if (!is.null(shape.palette)) {
-      pc.pred3 <- pc.pred3 + scale_shape_manual(legendname, 
-                                                values = shape.palette)
-    }
-    if (!is.null(colpalette)) {
+      if (!is.null(shape.palette)) {
+       pc.pred3 <- pc.pred3 + scale_shape_manual(legendname, 
+      }
+      if (!is.null(colpalette)) {
       pc.pred3 <- pc.pred3 + scale_color_manual(legendname, 
                                                 values = colpalette)
-    }
-    if (ellipses == T) {
+      }
+      if (ellipses == T) {
       pc.pred3 <- pc.pred3 + stat_ellipse(aes(color = factor(type)), 
                                           level = conf)
-    }
-    if (saveplot == T) {
+      }
+      if (saveplot == T) {
       ggsave(paste0(output_folder, test_string, "_projected_onto_", 
                     train_string, "_", comp.x, "_vs_", comp.y, savetype), 
              dpi = 300, plot = pc.pred3, width = w, height = h)
-    }
+      }
     pc.pred3
   }
   else {
