@@ -178,7 +178,7 @@ PLSR_from_file_and_predict_second_dataset=function (file, file2, sample.names, s
                   check_overlap = TRUE, size = 2.5)
       }
       if (!is.null(shape.palette)) {
-       pc.pred3 <- pc.pred3 + scale_shape_manual(legendname, 
+       pc.pred3 <- pc.pred3 + scale_shape_manual(legendname,values=shape.palette) 
       }
       if (!is.null(colpalette)) {
       pc.pred3 <- pc.pred3 + scale_color_manual(legendname, 
