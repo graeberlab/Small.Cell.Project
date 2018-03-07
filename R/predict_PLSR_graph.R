@@ -9,7 +9,10 @@
 #' @param train_string string of training data to insert in file name of predicted scores
 #' @param test_string string of data being tested to insert in file name of predicted scores
 #' @param train_pattern annotation type of main group in your comparison ,taken from 2nd column in anno.
-#' 
+#' @param varimax.it do you want to perform varimax , default varimax=F
+#' @param varimax.comp # of varimax comps , has to match # of comps
+#' @param shape.palette vector with numbers reprsenting shapes according to R plotting
+#'
 #' @importFrom mixOmics plsda plotIndiv
 #' 
 #' @export
@@ -17,7 +20,7 @@
 
 
 
-predict_PCA_graph=function(prediction_file,test_files_folder,anno.file,output_folder="./",train_string="",test_pattern="",train_pattern="",comps=3){
+predict_PLSR_graph=function(prediction_file,test_files_folder,anno.file,output_folder="./",train_string="",test_pattern="",train_pattern="",comps=3,varimax=F,varimax.comp=2,shape.palette=NULL,colpalette = NULL){
   
   all.files.short.path=list.files(test_files_folder,pattern=test_pattern,full.names=F)
   all.files.long.path=list.files(test_files_folder,pattern=test_pattern,full.names=T)
@@ -25,12 +28,12 @@ predict_PCA_graph=function(prediction_file,test_files_folder,anno.file,output_fo
   human.info=read.delim(anno.file)
   for(i in 1:length(all.names)) {
     nam=all.names[i]
-    PCA_from_file_and_predict_second_dataset(prediction_file,
+    PLSR_from_file_and_predict_second_dataset(prediction_file,
                                               all.files.long.path[i],
                                               sample.names= human.info$sample, sample.type = factor(human.info$type),
                                               y.response =  ifelse(human.info$type==train_pattern,1,0),
-                                              sample.names2 = human.info$sample,sample.type2 =  factor(human.info$type), test_string = nam,
-                                              "Projection", comps = comps, scale = F, labels =F,output_folder=output_folder,train_string=train_string,TCGA=T)
+                                              test_string = nam,train_string=train_string,comps=comps,varimax=varimax,varimax.comp=varimax.com,
+                                              "Projection", comps = comps, scale = F, labels =F,output_folder=output_folder,TCGA=T,shape.palette=shape.palette,colpalette = colpalette)
     print(paste0("Cancer ",nam," is done!"))
   }
 }

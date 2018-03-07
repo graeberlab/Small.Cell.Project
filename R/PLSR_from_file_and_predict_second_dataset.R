@@ -36,8 +36,7 @@
 #' @export
 #'
 
-PLSR_from_file_and_predict_second_dataset=function (file, file2, sample.names, sample.type, y.response, 
-          sample.names2 = NULL, sample.type2 = NULL, train_string, 
+PLSR_from_file_and_predict_second_dataset=function (file, file2, sample.names, sample.type, y.response,train_string,
           test_string, title = "PLSR", comp.x = "comp.1", comp.y = "comp.2", 
           comps = 2, labels = F, saveplot = T, savetype = ".png", w = 8, 
           h = 6, legendname = "default", scale = F, plot_both = T, 
