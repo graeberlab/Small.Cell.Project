@@ -90,6 +90,15 @@ PCA_from_file_and_predict_second_dataset=function (file, file2, sample.names, sa
     x.variates=as.data.frame(cbind(-1*x.variates[,1],x.variates[,-1]))
     colnames(x.variates)=temp.names
     rownames(x.variates)=temp.samps
+    
+    temp.names = colnames(x.loadings)
+    temp.samps = rownames(x.loadings)
+    x.loadings = as.data.frame(cbind(-1 * x.loadings[, 1], 
+                                     x.loadings[, -1]))
+    colnames(x.loadings) = temp.names
+    rownames(x.loadings) = temp.samps
+    
+    
   }
 
   
@@ -129,7 +138,7 @@ PCA_from_file_and_predict_second_dataset=function (file, file2, sample.names, sa
   
  
   
-  rotated.data2 = scale(t.data2, pca$center, pca$scale) %*% pca$rotation 
+  rotated.data2 = scale(t.data2, pca$center, pca$scale) %*% x.loadings 
   
   
   if (varimax == T) {
@@ -142,13 +151,13 @@ PCA_from_file_and_predict_second_dataset=function (file, file2, sample.names, sa
     rotated.data2 = as.data.frame(rotated.data2)
   }
   
-  if(rotate==T){
-    temp.names=colnames(rotated.data2)
-    temp.samps=rownames(rotated.data2)
-    rotated.data2=as.data.frame(cbind(-1*rotated.data2[,1],rotated.data2[,-1]))
-    colnames(rotated.data2)=temp.names
-    rownames(rotated.data2)=temp.samps
-  }
+  # if(rotate==T){
+  #   temp.names=colnames(rotated.data2)
+  #   temp.samps=rownames(rotated.data2)
+  #   rotated.data2=as.data.frame(cbind(-1*rotated.data2[,1],rotated.data2[,-1]))
+  #   colnames(rotated.data2)=temp.names
+  #   rownames(rotated.data2)=temp.samps
+  # }
   
   rotated.data2=as.data.frame(rotated.data2)
   write.table(cbind(Sample = rownames(rotated.data2), (rotated.data2)), 
