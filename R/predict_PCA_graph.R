@@ -12,7 +12,7 @@
 #' @param varimax.comp # of varimax comps , has to match # of comps
 #' @param shape.palette vector with numbers reprsenting shapes according to R plotting
 #' 
-#' @importFrom utils read.delim stats
+#' @importFrom utils read.delim 
 #' 
 #' @export
  predict_PCA_graph=function(prediction_file,test_files_folder,anno.file,output_folder="./",train_string="",test_pattern="",comps=3,rotate=F,varimax=F,varimax.comp=2,shape.palette=NULL) {

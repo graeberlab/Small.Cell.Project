@@ -13,8 +13,6 @@
 #' @param varimax.comp # of varimax comps , has to match # of comps
 #' @param shape.palette vector with numbers reprsenting shapes according to R plotting
 #'
-#' @importFrom mixOmics plsda plotIndiv
-#' 
 #' @export
 #'
 
