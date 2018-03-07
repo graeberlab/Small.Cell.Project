@@ -138,7 +138,7 @@ PCA_from_file_and_predict_second_dataset=function (file, file2, sample.names, sa
   
  
   
-  rotated.data2 = scale(t.data2, pca$center, pca$scale) %*% x.loadings 
+  rotated.data2 = scale(t.data2, pca$center, pca$scale) %*% as.matrix(x.loadings) 
   
   
   if (varimax == T) {
