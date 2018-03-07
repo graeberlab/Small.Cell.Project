@@ -15,6 +15,7 @@
 #' @param title title of the plot
 #' 
 #' @param file2 file for test data matrix
+#' @param rotate rotates graph along y axis
 #' @param sample.names2 Vector of sample names in 2nd dataset, if needed
 #' @param sample.type2 Vector of sample types in 2nd dataset, if needed
 #' @param train_string string of training data to insert in file name of predicted scores
@@ -38,11 +39,11 @@
 
 PCA_from_file_and_predict_second_dataset=function (file, file2, sample.names, sample.type, y.response, 
                                                     sample.names2 = NULL, sample.type2 = NULL, train_string, 
-                                                    test_string, title = "PLSR", comp.x = "PC1", comp.y = "PC2", 
+                                                    test_string, title = "PCA", comp.x = "PC1", comp.y = "PC2", 
                                                     comps = 2, labels = F, saveplot = T, savetype = ".png", w = 8, 
                                                     h = 6, legendname = "default", scale = F, center=T, plot_both = T, 
                                                     colpalette = NULL, shape.palette = NULL, ellipses = T, conf = 0.9, 
-                                                    varimax = F, varimax.comp = 2, output_folder = "./",TCGA=F,threshold=3,rank=3,rotate=F,do.legend=T) {
+                                                    varimax = F, varimax.comp = 2, output_folder = "./",TCGA=F,threshold=3,rotate=F,do.legend=T) {
   
 
   data = read.table(file, sep = "\t", header = T, stringsAsFactors = FALSE,   quote = "")
@@ -65,7 +66,7 @@ PCA_from_file_and_predict_second_dataset=function (file, file2, sample.names, sa
   data2 = data2[order(data2[, 1]), ]
   rownames(data) = make.names(data[, 1], unique = TRUE)
   t.data = data.frame(t(data[, -1]))
-  pca<-prcomp(t.data,scale=scale,center=center,rank.=rank);
+  pca<-prcomp(t.data,scale=scale,center=center,rank.=comps);
   x.variates=as.data.frame(pca$x)
  # x.variates=cbind("Sample"=rownames(x.variates),x.variates)
   x.loadings=pca$rotation
@@ -119,7 +120,8 @@ PCA_from_file_and_predict_second_dataset=function (file, file2, sample.names, sa
                 check_overlap = TRUE, size = 2.5)
     }
   pc.pred
-  
+  ggsave(paste0(output_folder, test_string, "_PCA_",comp.x, "_vs_", comp.y, savetype), 
+         dpi = 300, plot = pc.pred, width = w, height = h)
   
   
   rownames(data2) = make.names(data2[, 1], unique = TRUE)
@@ -128,8 +130,6 @@ PCA_from_file_and_predict_second_dataset=function (file, file2, sample.names, sa
  
   
   rotated.data2 = scale(t.data2, pca$center, pca$scale) %*% pca$rotation 
-  
-  
   
   
   if (varimax == T) {
@@ -150,7 +150,7 @@ PCA_from_file_and_predict_second_dataset=function (file, file2, sample.names, sa
     rownames(rotated.data2)=temp.samps
   }
   
-  
+  rotated.data2=as.data.frame(rotated.data2)
   write.table(cbind(Sample = rownames(rotated.data2), (rotated.data2)), 
               paste0(output_folder, test_string, "_projected_onto_", 
                      train_string, "_PCA_predicted.scores.txt"), sep = "\t", 

@@ -6,12 +6,12 @@
 \usage{
 PCA_from_file_and_predict_second_dataset(file, file2, sample.names, sample.type,
   y.response, sample.names2 = NULL, sample.type2 = NULL, train_string,
-  test_string, title = "PLSR", comp.x = "PC1", comp.y = "PC2",
-  comps = 2, labels = F, saveplot = T, savetype = ".png", w = 8,
-  h = 6, legendname = "default", scale = F, center = T, plot_both = T,
+  test_string, title = "PCA", comp.x = "PC1", comp.y = "PC2", comps = 2,
+  labels = F, saveplot = T, savetype = ".png", w = 8, h = 6,
+  legendname = "default", scale = F, center = T, plot_both = T,
   colpalette = NULL, shape.palette = NULL, ellipses = T, conf = 0.9,
   varimax = F, varimax.comp = 2, output_folder = "./", TCGA = F,
-  threshold = 3, rank = 3, rotate = F, do.legend = T)
+  threshold = 3, rotate = F, do.legend = T)
 }
 \arguments{
 \item{file}{file for X matirx}
@@ -63,6 +63,8 @@ PCA_from_file_and_predict_second_dataset(file, file2, sample.names, sample.type,
 \item{output_folder}{the folder to output to, default is ./ i.e. current folder}
 
 \item{TCGA}{predicted files are from TCGA, barcodes separated by periods, so remove normal samples, default is FALSE}
+
+\item{rotate}{rotates graph along y axis}
 
 \item{comp}{number of components to compute}
 }
