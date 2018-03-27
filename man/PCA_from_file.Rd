@@ -4,7 +4,8 @@
 \alias{PCA_from_file}
 \title{PCA from file}
 \usage{
-PCA_from_file(file, center = TRUE, scale = FALSE, rank. = NULL)
+PCA_from_file(file, center = TRUE, scale = FALSE, rank. = NULL,
+  rotate = F)
 }
 \arguments{
 \item{file}{Filepath/filename of data matrix}

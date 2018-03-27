@@ -14,7 +14,7 @@
 #' 
 
 
-PCA_from_file=function(file,center=TRUE,scale=FALSE,rank.=NULL) {
+PCA_from_file=function(file,center=TRUE,scale=FALSE,rank.=NULL,rotate=F) {
   data=read.delim(file, header = T, stringsAsFactors = F)
   
   #remove rows that are all 0
@@ -29,7 +29,11 @@ PCA_from_file=function(file,center=TRUE,scale=FALSE,rank.=NULL) {
   #pca_loadings=cbind("Loading"=rownames(pca_loadings),pca_loadings)#if genenames in rownames
   pca_loadings=cbind("Loading"=data[,1],pca_loadings)#if genenames not in rownames
   pca_evalues=pca$sdev
-  
+  if(rotate==T){
+   pca_scores[,"PC1"]=-1*as.numeric(pca_scores[,"PC1"])
+   pca_loadings[,"PC1"]=-1*as.numeric(pca_loadings[,"PC1"])
+    
+  }
   
   #save data
   name=sub(".txt","",file)

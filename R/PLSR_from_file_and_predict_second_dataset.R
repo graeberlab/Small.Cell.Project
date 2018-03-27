@@ -32,7 +32,8 @@
 #' @param output_folder the folder to output to, default is ./ i.e. current folder
 #' @param TCGA predicted files are from TCGA, barcodes separated by periods, so remove normal samples, default is FALSE
 #'
-#' @importFrom mixOmics pls
+#' @importFrom mixOmics pls 
+#' @importFrom data.table fread
 #' @export
 #'
 
@@ -43,7 +44,7 @@ PLSR_from_file_and_predict_second_dataset=function (file, file2, sample.names, s
           colpalette = NULL, shape.palette = NULL, ellipses = T, conf = 0.9, 
           varimax = F, varimax.comp = 2, output_folder = "./",TCGA=F,threshold=3,legend=F) {
   require(mixOmics)
-  data = read.table(file, sep = "\t", header = T, stringsAsFactors = FALSE, 
+  data = fread(file, sep = "\t", header = T, stringsAsFactors = FALSE, 
                     quote = "")
   data = data[rowSums((data[, -1] == 0)) < ncol(data[-1]), 
               ]

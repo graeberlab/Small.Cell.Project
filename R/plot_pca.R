@@ -30,7 +30,7 @@ plot_pca = function (file, info.name, info.type, title = "", labels = TRUE,
           ellipses = F, conf = 0.95, point_size = 3,savename="example",saveplot=F,savetype=".png",w=8,h=6,label_size=3,colpalette=NULL,shape.palette=NULL,legendname = "default") {
   require(ggplot2)
   require(vegan)
-  table <- read.table(file, header = TRUE)
+  table <- read.table(file, header = TRUE,stringsAsFactors = F)
   table$type = info.type[match(table$Score, info.name)]
   if (!is.null(label_file)) {
     label_frame = read.delim(label_file)
@@ -70,7 +70,13 @@ plot_pca = function (file, info.name, info.type, title = "", labels = TRUE,
       ggsave(paste0(savename, "_", PCx, "_vs_", PCy, savetype), 
              dpi = 300, plot = pcx.y, width = w, height = h)
     pcx.y} else {pcx.y}
-  }else {
+  }
+  # if (color_range==T) {
+  #   col_frame = read.table(color_range_file,header=T,stringsAsFactors = F)
+  #   table = dplyr::inner_join(table, col_frame, by = "Score")
+  #   pcx.y<-pcx.y +geom_point(size = I(point_size),aes(color = color))+ scale_colour_gradient(low="blue",high="red")
+  # } 
+else {
     if (saveplot == T) {
       ggsave(paste0(savename, "_", PCx, "_vs_", PCy, savetype), 
              dpi = 300, plot = pcx.y, width = w, height = h)

@@ -30,8 +30,8 @@ predict_PLSR_graph=function(prediction_file,test_files_folder,anno.file,output_f
                                               all.files.long.path[i],
                                               sample.names= human.info$sample, sample.type = factor(human.info$type),
                                               y.response =  ifelse(human.info$type==train_pattern,1,0),
-                                              test_string = nam,train_string=train_string,comps=comps,varimax=varimax,varimax.comp=varimax.com,
-                                              "Projection", comps = comps, scale = F, labels =F,output_folder=output_folder,TCGA=T,shape.palette=shape.palette,colpalette = colpalette)
+                                              test_string = nam,train_string=train_string,comps=comps,varimax=varimax,varimax.comp=varimax.comp,
+                                              "Projection", scale = F, labels =F,output_folder=output_folder,TCGA=T,shape.palette=shape.palette,colpalette = colpalette)
     print(paste0("Cancer ",nam," is done!"))
   }
 }
