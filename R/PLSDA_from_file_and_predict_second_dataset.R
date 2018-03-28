@@ -20,6 +20,7 @@
 #' @param colpalette allows you to put in a color palette of form c("#F87660", "#39B600",....etc) to manually assign colors
 #' @param shape.palette allows you to put in a shape palette of form c(1, 3,....etc) to manually assign shapes
 #' @importFrom mixOmics plsda plotIndiv
+#' @importFrom data.table fread
 #' 
 #' @export
 #'
@@ -29,11 +30,11 @@ PLSDA_from_file_and_predict_second_dataset = function(file, file2, sample.names,
                                                       output_folder="./",train_string="",test_string="",comp.x = "comp.1", comp.y = "comp.2",TCGA=F,plot_both = T, 
                                                       colpalette = NULL, shape.palette = NULL,labels = F,legendname = "default"){
   require(mixOmics)
-  data = read.table(file, sep = "\t", header = T, stringsAsFactors = FALSE, 
+  data = fread(file, sep = "\t", header = T, stringsAsFactors = FALSE, 
                     quote = "")
   data = data[rowSums((data[, -1] == 0)) < ncol(data[-1]), 
               ]
-  data2 = read.table(file2, sep = "\t", header = T, stringsAsFactors = FALSE, 
+  data2 = fread(file2, sep = "\t", header = T, stringsAsFactors = FALSE, 
                      quote = "")
   data = data[!duplicated(data[, 1]), ]
   data2 = data2[!duplicated(data2[, 1]), ]
