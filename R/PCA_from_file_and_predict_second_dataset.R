@@ -104,9 +104,9 @@ PCA_from_file_and_predict_second_dataset=function (file, file2, sample.names, sa
   
   name=sub(".txt","",file)
   savename=paste(name,"_prcomp_scores.txt",sep='');
-  write.table(x.variates,savename,sep='\t',row.names=FALSE,quote=FALSE);
+  write.table(cbind(Score=rownames(x.variates),x.variates),savename,sep='\t',row.names=FALSE,quote=FALSE);
   savename=paste(name,"_prcomp_loadings.txt",sep='');
-  write.table(x.loadings,savename,sep='\t',row.names=FALSE,quote=FALSE);
+  write.table(cbind(Loadings=rownames(x.loadings),x.loadings),savename,sep='\t',row.names=FALSE,quote=FALSE);
   savename=paste(name,"_prcomp_sdev.txt",sep='');
   write.table(pca_evalues,savename,sep='\t',row.names=FALSE,quote=FALSE);
   print(summary(pca))
@@ -181,12 +181,12 @@ PCA_from_file_and_predict_second_dataset=function (file, file2, sample.names, sa
   if(do.legend==F) {
     
     
-    pc.pred2<- pc.pred2 +theme( legend.position = "none",plot.title = element_text(size = 30), 
+    pc.pred2<- pc.pred2 +geom_point(size = I(2), show.legend=F,aes(color = factor(type)))+ theme_bw()  + theme( legend.position = "none",plot.title = element_text(size = 30), 
                                axis.title = element_text(size = 30), legend.background = element_rect(), 
                                axis.text.x = element_text(margin = margin(b = -2)), 
                                axis.text.y = element_text(margin = margin(l = -14))) + 
       labs(title = title) + guides(fill=FALSE)+
-      theme_bw()  + if (labels == TRUE) {
+     if (labels == TRUE) {
         geom_text(data = prediction, mapping = aes(label = (rownames(prediction))), 
                   check_overlap = TRUE, size = 2.3)
       }} else{
@@ -227,6 +227,9 @@ PCA_from_file_and_predict_second_dataset=function (file, file2, sample.names, sa
     if (ellipses == T) {
       pc.pred3 <- pc.pred3 + stat_ellipse(aes(color = factor(type)), 
                                           level = conf)
+    }
+    if(do.legend==F){
+      pc.pred3<-pc.pred3 +theme(legend.position="none")
     }
     if (saveplot == T) {
       ggsave(paste0(output_folder, test_string, "_projected_onto_", 
