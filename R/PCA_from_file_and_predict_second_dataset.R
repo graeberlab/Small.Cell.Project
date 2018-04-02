@@ -146,7 +146,7 @@ PCA_from_file_and_predict_second_dataset=function (file, file2, sample.names, sa
     temp.samps=rownames(rotated.data2)
     rotated.data2 <- as.matrix(rotated.data2[, 1:(varimax.comp)]) %*% 
       rotation$rotmat
-    colnames(rotated.data2) = temp.names
+    colnames(rotated.data2) = temp_names
     rownames(rotated.data2) = temp.samps
     rotated.data2 = as.data.frame(rotated.data2)
   }
