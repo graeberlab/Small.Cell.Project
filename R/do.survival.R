@@ -49,7 +49,7 @@ do.survival=function(threshold=0,pattern,path,output_folder,component= 'comp.1',
   epithelial=unique(surv.anno$type)
   output.scaled.tcga.epithelial= output.scaled.tcga[output.scaled.tcga$type %in% epithelial,]
   
-  output.surv=output.scaled.tcga.epithelial %>% filter(!output.scaled.tcga.epithelial$type %in% c("PAAD","LIHC"))
+  output.surv=output.scaled.tcga.epithelial %>% filter(!output.scaled.tcga.epithelial$type %in% c("PAAD"))
   #output.surv=output.scaled.tcga.epithelial
   output.surv$prediction=0
   threshold=threshold
@@ -77,7 +77,7 @@ do.survival=function(threshold=0,pattern,path,output_folder,component= 'comp.1',
     surv.anno=read.delim("//10.47.223.100/data2/users/nbalanis/SmallCell/Annotation/pancancer.with.typecensoring.table.epithelial.txt")
     epithelial=unique(surv.anno$type)
     output.scaled.tcga.epithelial= output.scaled.tcga[output.scaled.tcga$type %in% epithelial,]
-    output.surv=output.scaled.tcga.epithelial %>% filter(!output.scaled.tcga.epithelial$type %in% c("PAAD","LIHC")) 
+    output.surv=output.scaled.tcga.epithelial %>% filter(!output.scaled.tcga.epithelial$type %in% c("PAAD")) 
     #output.surv=output.scaled.tcga.epithelial
     output.surv.discrete=output.surv
     sum(output.surv.discrete$prediction)
