@@ -15,7 +15,7 @@
 #' @importFrom utils read.delim 
 #' 
 #' @export
- predict_PCA_graph=function(prediction_file,test_files_folder,anno.file,output_folder="./",train_string="",test_pattern="",comps=3,rotate=F,varimax=F,varimax.comp=2,shape.palette=NULL) {
+ predict_PCA_graph=function(prediction_file,test_files_folder,anno.file,output_folder="./",train_string="",test_pattern="",comps=2,rotate=F,varimax=F,varimax.comp=2,shape.palette=NULL) {
    all.files.short.path=list.files(test_files_folder,pattern=test_pattern,full.names=F)
    all.files.long.path=list.files(test_files_folder,pattern=test_pattern,full.names=T)
    all.names=as.character(sapply(all.files.short.path, function(x) strsplit(x,"_")[[1]][1]))

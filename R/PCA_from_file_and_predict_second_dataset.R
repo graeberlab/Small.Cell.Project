@@ -149,7 +149,7 @@ PCA_from_file_and_predict_second_dataset=function (file, file2, sample.names, sa
                 check_overlap = TRUE, size = 2.5)
     }
   pc.pred
-  ggsave(paste0(output_folder, test_string, "_PCA_",comp.x, "_vs_", comp.y, savetype), 
+  ggsave(paste0(output_folder, train_string, ".PCA.",comp.x, "_vs_", comp.y, savetype), 
          dpi = 300, plot = pc.pred, width = w, height = h)
   
   ### KEEP IT THIS WAY. 

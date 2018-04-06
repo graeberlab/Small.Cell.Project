@@ -30,18 +30,22 @@ do_full_boxplot_RNA=function(file_pattern,tcga_location,crpc_file,nepc_file,sclc
   }
   
   crpc=read.delim(crpc_file)
+  crpc$type="CRPC"
   crpc.mean=mean(crpc[,comp.x])
   crpc.sd=sd(crpc[,comp.x])
   crpc.scaled=crpc
   crpc.scaled[,comp.x]= (crpc.scaled[,comp.x]-crpc.mean)/crpc.sd
   crpc.scaled$type="CRPC"
+ 
   nepc=read.delim(nepc_file)
   colnames(nepc)[1]="Sample"
   nepc$type="NEPC"
   nepc.scaled=nepc
   nepc.scaled[,comp.x]= (nepc[,comp.x]-crpc.mean)/crpc.sd
   output.scaled.beltran=rbind(nepc.scaled,crpc.scaled)
+  output.beltran=rbind(nepc,crpc)
   output.scaled.beltran$size_n=ifelse(output.scaled.beltran[,comp.x] >=threshold,5,3 )
+  output.beltran$size_n=ifelse(output.beltran[,comp.x] >=threshold,5,3 )
   
   lung=rbind(list_of_dataframes[["LUAD"]],list_of_dataframes[["LUSC"]])
   lung$type="NSCLC"
@@ -55,7 +59,10 @@ do_full_boxplot_RNA=function(file_pattern,tcga_location,crpc_file,nepc_file,sclc
   george.15.scaled=george.15
   george.15.scaled[,comp.x]= (george.15[,comp.x]-lung.mean)/lung.sd
   output.scaled.george=rbind(george.15.scaled,lung.scaled)
+  output.george=rbind(george.15,lung)
   output.scaled.george$size_n=ifelse(output.scaled.george[,comp.x] >=threshold,5,3 )
+  output.george$size_n=ifelse(output.george[,comp.x] >=threshold,5,3 )
+  
   list_of_dataframes_scaled=lapply(list_of_dataframes,function (x) {
     blah=cbind (x[,1],scale(x[,2:(2+components-1)]),x[,(2+components),drop=F])
     colnames(blah)[[1]]="Sample"
@@ -163,16 +170,16 @@ do_full_boxplot_RNA=function(file_pattern,tcga_location,crpc_file,nepc_file,sclc
   by.avg.noz.all= unique(by.avg.noz.all$type)
   
   
-   plot1=ggplot(data=output.scaled.beltran,aes(x = factor(type,levels=c("NEPC","CRPC")), y = output.scaled.beltran[,comp.x]))+geom_boxplot(lwd=1.25,outlier.color=NA,aes(color=factor(type)))+  
+   plot1=ggplot(data=output.beltran,aes(x = factor(type,levels=c("NEPC","CRPC")), y = output.beltran[,comp.x]))+geom_boxplot(lwd=1.25,outlier.color=NA,aes(color=factor(type)))+  
     geom_jitter(shape=19,width=0.1,aes(color=factor(type),size=size_n))+theme_bw()+
     theme(axis.text=element_text(size=30,face="bold",angle=90),axis.title=element_text(size=30,face="bold"),legend.position="none",
           panel.border = element_rect(colour = "black", fill=NA, size=2))+
-    scale_color_manual(values =  c(col_vector[1:2],"black"))+ labs(x="",y="Neuroendocrine Score")+scale_x_discrete(labels=c("NEPC","CRPC-Adeno"))+coord_cartesian(ylim = c(-5, 10)) 
-  plot2=ggplot(data=output.scaled.george,aes(x = factor(type,levels=c("SCLC","NSCLC")), y = output.scaled.george[,comp.x]))+geom_boxplot(lwd=1.25,outlier.color=NA,aes(color=factor(type)))+ 
+    scale_color_manual(values =  c(col_vector[1:2],"black"))+ labs(x="",y="Neuroendocrine Score")+scale_x_discrete(labels=c("NEPC","CRPC-Adeno"))
+  plot2=ggplot(data=output.george,aes(x = factor(type,levels=c("SCLC","NSCLC")), y = output.george[,comp.x]))+geom_boxplot(lwd=1.25,outlier.color=NA,aes(color=factor(type)))+ 
     geom_jitter(width=0.1,aes(color=factor(type),size=size_n))+theme_bw()+
     theme(axis.text=element_text(size=30,face="bold",angle=90),axis.title=element_text(size=30,face="bold"),legend.position="none",
           panel.border = element_rect(colour = "black", fill=NA, size=2))+
-    scale_color_manual(values =  col_vector[3:4])+ labs(x="",y=element_blank()) +coord_cartesian(ylim = c(-5, 10))+
+    scale_color_manual(values =  col_vector[3:4])+ labs(x="",y=element_blank()) +
     scale_x_discrete(labels=c("SCLC","NSCLC"))
   plot3=ggplot(data=output.tcga,aes(x = factor(type,levels=bymax.notscaled), y = output.tcga[,comp.x]))+geom_boxplot(lwd=1.25,outlier.color=NA,aes(color=factor(type)))+  geom_jitter(width=0.1,aes(color=factor(type),size=size_n))+
     theme_bw()+theme(axis.text=element_text(size=28,face="bold",angle=90),axis.title=element_text(size=30,face="bold"),legend.position="none",,panel.border = element_rect(colour = "black", fill=NA, size=2))+

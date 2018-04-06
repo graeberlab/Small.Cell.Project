@@ -5,7 +5,7 @@
 \title{Predict all files in a folder using PCA of a training dataset, file names have to be of form name_.......txt}
 \usage{
 predict_PCA_graph(prediction_file, test_files_folder, anno.file,
-  output_folder = "./", train_string = "", test_pattern = "", comps = 3,
+  output_folder = "./", train_string = "", test_pattern = "", comps = 2,
   rotate = F, varimax = F, varimax.comp = 2, shape.palette = NULL)
 }
 \arguments{
