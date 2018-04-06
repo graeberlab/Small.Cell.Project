@@ -9,7 +9,8 @@ PLSDA_from_file_and_predict_second_dataset(file, file2, sample.names,
   output_folder = "./", train_string = "", test_string = "",
   comp.x = "comp.1", comp.y = "comp.2", TCGA = F, plot_both = T,
   colpalette = NULL, shape.palette = NULL, labels = F,
-  legendname = "default")
+  legendname = "default", ellipses = F, saveplot = T, savetype = ".png",
+  w = 8, h = 6, do.legend = T, title = "PLSDA")
 }
 \arguments{
 \item{file}{file for X matirx}

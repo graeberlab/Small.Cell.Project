@@ -42,7 +42,7 @@ PLSR_from_file_and_predict_second_dataset=function (file, file2, sample.names, s
           comps = 2, labels = F, saveplot = T, savetype = ".png", w = 8, 
           h = 6, legendname = "default", scale = F, plot_both = T, 
           colpalette = NULL, shape.palette = NULL, ellipses = T, conf = 0.9, 
-          varimax = F, varimax.comp = 2, output_folder = "./",TCGA=F,threshold=3,legend=F) {
+          varimax = F, varimax.comp = 2, output_folder = "./",TCGA=F,threshold=3,do.legend=T) {
   require(mixOmics)
   data = fread(file, sep = "\t", header = T, stringsAsFactors = FALSE, 
                     quote = "")
@@ -159,7 +159,7 @@ PLSR_from_file_and_predict_second_dataset=function (file, file2, sample.names, s
   
   if (plot_both == T) {
     comb = rbind(prediction, x.variates)
-    if(legend==F) {
+    if(do.legend==F) {
       pc.pred3 = ggplot(data = comb, aes_string(x = comp.x,  y = comp.y), ) + geom_point(size = I(3), aes(color = factor(type),shape = factor(type))) +
         theme(legend.position = "none",  plot.title = element_text(size = 30), legend.text = element_text(size = 22),legend.title = element_text(size = 20), axis.title = element_text(size = 30), 
         legend.background = element_rect(), axis.text.x = element_text(margin = margin(b = -2)),axis.text.y = element_text(margin = margin(l = -14))) + 

@@ -141,15 +141,15 @@ PCA_from_file_and_predict_second_dataset=function (file, file2, sample.names, sa
   rotated.data2 = scale(t.data2, pca$center, pca$scale) %*% as.matrix(x.loadings) 
   
   
-  if (varimax == T) {
-    temp_names=colnames(rotated.data2)
-    temp.samps=rownames(rotated.data2)
-    rotated.data2 <- as.matrix(rotated.data2[, 1:(varimax.comp)]) %*% 
-      rotation$rotmat
-    colnames(rotated.data2) = temp_names
-    rownames(rotated.data2) = temp.samps
-    rotated.data2 = as.data.frame(rotated.data2)
-  }
+  # if (varimax == T) {
+  #   temp_names=colnames(rotated.data2)
+  #   temp.samps=rownames(rotated.data2)
+  #   rotated.data2 <- as.matrix(rotated.data2[, 1:(varimax.comp)]) %*% 
+  #     rotation$rotmat
+  #   colnames(rotated.data2) = temp_names[1:(varimax.comp)]
+  #   rownames(rotated.data2) = temp.samps
+  #   rotated.data2 = as.data.frame(rotated.data2)
+  # }
   
   # if(rotate==T){
   #   temp.names=colnames(rotated.data2)
@@ -169,6 +169,7 @@ PCA_from_file_and_predict_second_dataset=function (file, file2, sample.names, sa
   prediction.to.write=as.data.frame(prediction.to.write)
   prediction.to.write$type = sample.type[match(rownames(prediction.to.write),sample.names)]
   prediction.to.write$prediction =ifelse(prediction.to.write$PC1 >=threshold, 1,0)
+  
   write.table(prediction.to.write,paste0(output_folder,test_string,"_projected_onto_",train_string,"_",comps,"_comps_PCA_prediction.txt"),col.names=NA,quote=F,sep="\t",row.names=T)
   
   rotated.data2$type = sample.type[match(rownames(rotated.data2),sample.names)]
