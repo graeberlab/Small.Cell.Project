@@ -74,6 +74,22 @@ PCA_from_file_and_predict_second_dataset=function (file, file2, sample.names, sa
   #x.loadings=cbind("Loading"=data[,1],x.loadings)#if genenames not in rownames
   pca_evalues=pca$sdev
   
+  
+  
+  rownames(data2) = make.names(data2[, 1], unique = TRUE)
+  t.data2 = data.frame(t(data2[, -1]))
+  
+  
+  
+  rotated.data2 = scale(t.data2, pca$center, pca$scale) %*% as.matrix(x.loadings) 
+  
+  
+  
+  
+  
+  
+  
+  
   if (varimax == T) {
     rotation = varimax(as.matrix(x.loadings[, c(1:(varimax.comp))]), 
                        normalize = F)
@@ -117,6 +133,10 @@ PCA_from_file_and_predict_second_dataset=function (file, file2, sample.names, sa
   
   x.variates$type = sample.type[match(rownames(x.variates), 
                                       sample.names)]
+  
+  
+  
+  
   pc.pred = ggplot(data = x.variates, aes_string(x = comp.x, 
                                                  y = comp.y)) + geom_point(size = I(2), aes(color = factor(type))) + 
     theme(legend.position = "right", plot.title = element_text(size = 30), 
@@ -132,32 +152,24 @@ PCA_from_file_and_predict_second_dataset=function (file, file2, sample.names, sa
   ggsave(paste0(output_folder, test_string, "_PCA_",comp.x, "_vs_", comp.y, savetype), 
          dpi = 300, plot = pc.pred, width = w, height = h)
   
-  
-  rownames(data2) = make.names(data2[, 1], unique = TRUE)
-  t.data2 = data.frame(t(data2[, -1]))
-  
- 
-  
-  rotated.data2 = scale(t.data2, pca$center, pca$scale) %*% as.matrix(x.loadings) 
-  
-  
-  # if (varimax == T) {
-  #   temp_names=colnames(rotated.data2)
-  #   temp.samps=rownames(rotated.data2)
-  #   rotated.data2 <- as.matrix(rotated.data2[, 1:(varimax.comp)]) %*% 
-  #     rotation$rotmat
-  #   colnames(rotated.data2) = temp_names[1:(varimax.comp)]
-  #   rownames(rotated.data2) = temp.samps
-  #   rotated.data2 = as.data.frame(rotated.data2)
-  # }
-  
-  # if(rotate==T){
-  #   temp.names=colnames(rotated.data2)
-  #   temp.samps=rownames(rotated.data2)
-  #   rotated.data2=as.data.frame(cbind(-1*rotated.data2[,1],rotated.data2[,-1]))
-  #   colnames(rotated.data2)=temp.names
-  #   rownames(rotated.data2)=temp.samps
-  # }
+  ### KEEP IT THIS WAY. 
+  if (varimax == T) {
+    temp_names=colnames(rotated.data2)
+    temp.samps=rownames(rotated.data2)
+    rotated.data2 <- as.matrix(rotated.data2[, 1:(varimax.comp)]) %*%
+      rotation$rotmat
+    colnames(rotated.data2) = temp_names[1:(varimax.comp)]
+    rownames(rotated.data2) = temp.samps
+    rotated.data2 = as.data.frame(rotated.data2)
+  }
+
+  if(rotate==T){
+    temp.names=colnames(rotated.data2)
+    temp.samps=rownames(rotated.data2)
+    rotated.data2=as.data.frame(cbind(-1*rotated.data2[,1],rotated.data2[,-1]))
+    colnames(rotated.data2)=temp.names
+    rownames(rotated.data2)=temp.samps
+  }
   
   rotated.data2=as.data.frame(rotated.data2)
   write.table(cbind(Sample = rownames(rotated.data2), (rotated.data2)), 
