@@ -82,6 +82,7 @@ PLSR_from_file_and_predict_second_dataset=function (file, file2, sample.names, s
     scores = as.data.frame(scores)
     colnames(scores) = colnames(x.variates)
     x.variates = scores
+    x.loadings=loadings(rotation)[,1:(varimax.comp)]
   }
   x.variates$type = sample.type[match(rownames(x.variates), 
                                       sample.names)]

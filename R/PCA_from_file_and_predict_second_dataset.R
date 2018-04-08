@@ -98,6 +98,7 @@ PCA_from_file_and_predict_second_dataset=function (file, file2, sample.names, sa
     scores = as.data.frame(scores)
     colnames(scores)[1:ncol(scores)]=colnames(x.variates)[1:ncol(scores)]
     x.variates = scores
+    x.loadings=loadings(rotation)[,1:(varimax.comp)]
   }
   
   if(rotate==T){
