@@ -32,14 +32,15 @@ PLSDA_from_file_and_predict_second_dataset = function(file, file2, sample.names,
                                                       h = 6,do.legend=T,title="PLSDA"){
   require(mixOmics)
   data = fread(file, sep = "\t", header = T, stringsAsFactors = FALSE, 
-                    quote = "")
+                    quote = "",na.strings="NA")
   data=as.data.frame(data)
   data = data[rowSums((data[, -1] == 0)) < ncol(data[-1]), 
               ]
   data2 = fread(file2, sep = "\t", header = T, stringsAsFactors = FALSE, 
-                     quote = "")
-  
+                     quote = "",na.strings="NA")
+  Print(paste0("Done reading ",file2))
   data2=as.data.frame(data2)
+  data2=na.omit(data2)
   data = data[!duplicated(data[, 1]), ]
   data2 = data2[!duplicated(data2[, 1]), ]
   if (TCGA == T) {
