@@ -38,7 +38,7 @@ PLSDA_from_file_and_predict_second_dataset = function(file, file2, sample.names,
               ]
   data2 = fread(file2, sep = "\t", header = T, stringsAsFactors = FALSE, 
                      quote = "",na.strings="NA")
-  Print(paste0("Done reading ",file2))
+  print(paste0("Done reading ",file2))
   data2=as.data.frame(data2)
   data2=na.omit(data2)
   data = data[!duplicated(data[, 1]), ]
