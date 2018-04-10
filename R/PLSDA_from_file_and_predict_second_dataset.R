@@ -57,7 +57,7 @@ PLSDA_from_file_and_predict_second_dataset = function(file, file2, sample.names,
   data2 = data2[order(data2[, 1]), ]
   
   rownames(data) = make.names(data[, 1], unique = TRUE)
-  t.data = data.frame(t(data[, -1]))
+  t.data = t(data[, -1])
   y.response = (data.frame(y.response)[match(rownames(t.data), 
                                              as.character(sample.names)), ])
   y.response = as.factor(y.response)

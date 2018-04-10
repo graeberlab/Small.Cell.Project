@@ -25,16 +25,18 @@ create_tcga_methyl_files=function (file, subset = TRUE, mysites = NULL, out.stri
   my_samps.cancers=intersect(my_samps.cancers,methyl.colnums)
   nam = strsplit(strsplit(file, "/")[[1]][length(strsplit(file, 
                                                           "/")[[1]])], "\\.")[[1]][1]
-  if (length(my_samps.normals) == 0) {
+  if (length(my_samps.normals) == 1) {
     methyl.cancers = fread(file, sep = "\t", header = T, stringsAsFactors = F, 
                            check.names = F, select = my_samps.cancers)
     methyl.cancers = methyl.cancers[-1, ]
     methyl.cancers = as.data.frame(methyl.cancers)
     colnames(methyl.cancers)[1] = "Site"
     methyl.cancers = na.omit(methyl.cancers)
+    colnames(methyl.cancers)[-1]=gsub(pattern = "-",replacement = ".",x = colnames(methyl.cancers)[-1])
+    colnames(methyl.cancers)[-1]=substr(x = colnames(methyl.cancers)[-1] ,start = 1,stop = 15)
+    
     if (subset == T) {
-      methyl.cancers = methyl.cancers[methyl.cancers[, 
-                                                     1] %in% mysites, ]
+      methyl.cancers = methyl.cancers[methyl.cancers[,  1] %in% mysites, ]
     }
     
     write.table(methyl.cancers, paste0(output_folder, nam, 
@@ -54,6 +56,12 @@ create_tcga_methyl_files=function (file, subset = TRUE, mysites = NULL, out.stri
     colnames(methyl.normals)[1] = "Site"
     methyl.normals = na.omit(methyl.normals)
     methyl.cancers = na.omit(methyl.cancers)
+    colnames(methyl.cancers)[-1]=gsub(pattern = "-",replacement = ".",x = colnames(methyl.cancers)[-1])
+    colnames(methyl.cancers)[-1]=substr(x = colnames(methyl.cancers)[-1] ,start = 1,stop = 15)
+    colnames(methyl.normals)[-1]=gsub(pattern = "-",replacement = ".",x = colnames(methyl.normals)[-1])
+    colnames(methyl.normals)[-1]=substr(x = colnames(methyl.normals)[-1] ,start = 1,stop = 15)
+    
+    
     if (subset == T) {
       methyl.cancers = methyl.cancers[methyl.cancers[, 
                                                      1] %in% mysites, ]
