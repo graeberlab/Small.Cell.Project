@@ -5,7 +5,7 @@
 \title{does survival analysis}
 \usage{
 do.survival(threshold = 0, pattern, path, output_folder,
-  component = "comp.1", pred_file = F)
+  component = "comp.1", pred_file = T, plsda = F)
 }
 \arguments{
 \item{threshold}{threshold to use to pick samples}

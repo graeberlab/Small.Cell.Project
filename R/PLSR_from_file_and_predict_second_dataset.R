@@ -48,8 +48,10 @@ PLSR_from_file_and_predict_second_dataset=function (file, file2, sample.names, s
                     quote = "")
   data = data[rowSums((data[, -1] == 0)) < ncol(data[-1]), 
               ]
-  data2 = read.table(file2, sep = "\t", header = T, stringsAsFactors = FALSE, 
+  data2 = fread(file2, sep = "\t", header = T, stringsAsFactors = FALSE, 
                      quote = "")
+  data2=as.data.frame(data2)
+  data2=na.omit(data2)
   if(TCGA == T){
   temp_name=colnames(data2)[1]
   cancer_samples=which(as.numeric(sapply(colnames(data2)[-1],function(x) strsplit(x,"\\.")[[1]][4])) <= 9) 

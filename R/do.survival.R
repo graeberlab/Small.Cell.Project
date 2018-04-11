@@ -14,15 +14,17 @@
 #'
 #' @export
 
-do.survival=function(threshold=0,pattern,path,output_folder,component= 'comp.1',pred_file=F){
+do.survival=function(threshold=0,pattern,path,output_folder,component= 'comp.1',pred_file=T,plsda=F){
   library(valorate)
   all.files.long.path=list.files(pattern=pattern,full.names=T,path = path)
   all.files.short.path=list.files(pattern=pattern,full.names=F,path = path)
   all.names=sapply(all.files.short.path, function(x) strsplit(x,"_")[[1]][1])
   list_of_dataframes<-lapply(all.files.long.path, read.table,header=T,row.names=NULL,sep = '\t',check.names=F,stringsAsFactors = F)
   names(list_of_dataframes)=all.names
+  if(plsda==F){
   for(i in 1:length(all.files.short.path)) {
     list_of_dataframes[[i]]$type=all.names[i]
+  }
   }
   if(pred_file==F) {
   list_of_dataframes_scaled=lapply(list_of_dataframes,function (x) {
