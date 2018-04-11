@@ -129,7 +129,7 @@ PLSR_from_file_and_predict_second_dataset=function (file, file2, sample.names, s
   pc.pred2 <- ggplot(prediction, aes_string(x = comp.x, y = comp.y)) + 
     geom_point(size = I(2), aes(color = factor(type)))
   
-  if(legend==F) {
+  if(do.legend==F) {
     
     
   pc.pred2<- pc.pred2 +theme(legend.position = "none", plot.title = element_text(size = 30), 
