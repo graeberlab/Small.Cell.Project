@@ -45,11 +45,12 @@ PLSR_from_file_and_predict_second_dataset=function (file, file2, sample.names, s
           varimax = F, varimax.comp = 2, output_folder = "./",TCGA=F,threshold=3,do.legend=T) {
   require(mixOmics)
   data = fread(file, sep = "\t", header = T, stringsAsFactors = FALSE, 
-                    quote = "")
+                    quote = "",data.table=F)
   data = data[rowSums((data[, -1] == 0)) < ncol(data[-1]), 
               ]
+  
   data2 = fread(file2, sep = "\t", header = T, stringsAsFactors = FALSE, 
-                     quote = "")
+                     quote = "",data.table=F)
   data2=as.data.frame(data2)
   data2=na.omit(data2)
   if(TCGA == T){
