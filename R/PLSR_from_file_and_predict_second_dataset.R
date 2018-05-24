@@ -71,6 +71,8 @@ PLSR_from_file_and_predict_second_dataset=function (file, file2, sample.names, s
   y.response = (data.frame(y.response)[match(rownames(t.data), 
                                              as.character(sample.names)), ])
   y.response = as.matrix(y.response)
+  t.data=t.data[which(!y.response %in% NA),]
+  y.response=as.vector(na.omit(y.response))
   pls.fit = pls(X = t.data, Y = y.response, scale = scale, 
                 ncomp = comps)
   
@@ -105,6 +107,12 @@ PLSR_from_file_and_predict_second_dataset=function (file, file2, sample.names, s
   t.data2 = data.frame(t(data2[, -1]))
   test.predict <- predict(pls.fit, t.data2)
   prediction <- as.data.frame(test.predict$variates)
+  Y.predictions= as.data.frame(test.predict$predict)
+  colnames(Y.predictions) <- colnames(x.variates)[-ncol(x.variates)]
+  Y.predictions= Y.predictions %>% tibble::rownames_to_column("Sample")
+  write.table(Y.predictions, paste0(output_folder, test_string, "_projected_onto_", 
+                                    train_string, "_PLSR_predicted.responses.txt"),sep = "\t", 
+              row.names = F, quote = F)
   colnames(prediction) <- colnames(x.variates)[-ncol(x.variates)]
   if (varimax == T) {
     predit <- as.matrix(prediction[, 1:(varimax.comp)]) %*% 

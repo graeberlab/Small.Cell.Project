@@ -28,7 +28,7 @@ pick.samples<-function(data.file,max.features=5,anno.file,train.method="LOOCV",t
   }
 
   data=read.delim(data.file,row.names=1)[1:max.features]
-  anno=read.delim(anno.file)
+  anno=read.delim(anno.file,stringsAsFactors = F)
   accuracy_vect=resample_vect<-rep(NA,max.features-1)
   train_control<- trainControl(method=train.method)
   for(i in 2:max.features){
@@ -42,7 +42,7 @@ pick.samples<-function(data.file,max.features=5,anno.file,train.method="LOOCV",t
   }
   features=find.simplest.model.with.best.accuracy(accuracy_vect)
   data.temp=data[,1:features]
-  data.temp$type=anno[match(rownames(data.temp),anno[,1]),2]
+  data.temp$type=as.factor(as.character(anno[match(rownames(data.temp),anno[,1]),2]))
   model<- train(type~., data=data.temp, trControl=train_control, method="lda")
   accuracy=as.numeric(model$results[2])
   print(paste0("Best model with fewest featues has ",features," features and ",accuracy," Accuracy"))

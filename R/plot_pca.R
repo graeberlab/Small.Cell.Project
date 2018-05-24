@@ -31,14 +31,15 @@ plot_pca = function (file, info.name, info.type, title = "", labels = TRUE,
   require(ggplot2)
   require(vegan)
   table <- read.table(file, header = TRUE,stringsAsFactors = F)
-  table$type = info.type[match(table$Score, info.name)]
+  table$type = as.factor(as.character(info.type[match(table$Score, info.name)]))
   if (!is.null(label_file)) {
     label_frame = read.delim(label_file)
     table = left_join(table, label_frame, by = "Score")
   }
   sdev = read.delim(paste0(gsub("scores.txt", "", file), "sdev.txt"))
-  sdev$var = sdev^2
-  sdev$pve = round(sdev$var/sum(sdev$var) * 100, digits = 2)
+  colnames(sdev)[1]="stdev"
+  sdev$vary = (sdev$stdev)^2
+  sdev$pve = round(sdev$vary/sum(sdev$vary) * 100, digits = 2)
   rownames(sdev) = paste0("PC", seq(1, nrow(sdev)))
   pcx.y <- ggplot(table, aes_string(x = PCx, y = PCy)) + geom_point(size = I(point_size), 
                                                                     aes(color = factor(type))) + theme(legend.position = "right", 
