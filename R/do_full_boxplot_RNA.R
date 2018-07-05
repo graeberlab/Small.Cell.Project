@@ -15,11 +15,8 @@
 
 do_full_boxplot_RNA=function(file_pattern,tcga_location,crpc_file,nepc_file,sclc_file,output_folder,comp.x="comp.1",components=3,threshold=3){
   library(data.table)
-  
   epithelial=c('ACC','BLCA','BRCA','CESC','CHOL','COADREAD','ESCA','HNSC','KICH','KIRC','KIRP','LIHC','LUAD','LUSC','OV','PAAD','PRAD',
                'STAD','THCA','UCEC','UCS')
-
-  
   all.files.short.path=list.files(tcga_location,pattern=file_pattern,full.names=F)
   all.files.long.path=list.files(tcga_location,pattern=file_pattern,full.names=T)
   all.names=as.character(sapply(all.files.short.path, function(x) strsplit(x,"_")[[1]][1]))
@@ -28,7 +25,6 @@ do_full_boxplot_RNA=function(file_pattern,tcga_location,crpc_file,nepc_file,sclc
   for(i in 1:length(all.files.short.path)) {
     list_of_dataframes[[i]]$type=all.names[i]
   }
-  
   crpc=read.delim(crpc_file)
   crpc$type="CRPC"
   crpc.mean=mean(crpc[,comp.x])
@@ -48,7 +44,7 @@ do_full_boxplot_RNA=function(file_pattern,tcga_location,crpc_file,nepc_file,sclc
  # output.beltran$size_n=ifelse(output.beltran[,comp.x] >=threshold,5,3 )
   
   lung=rbind(list_of_dataframes[["LUAD"]],list_of_dataframes[["LUSC"]])
-  lung$type="NSCLC"
+  lung$type="LUAD"
   lung.mean=mean(lung[,comp.x])
   lung.sd=sd(lung[,comp.x])
   lung.scaled=lung
@@ -97,20 +93,20 @@ do_full_boxplot_RNA=function(file_pattern,tcga_location,crpc_file,nepc_file,sclc
   ##### Z-scored all cancers
   plot1=ggplot(data=output.scaled.beltran,aes(x = factor(type,levels=c("NEPC","CRPC")), y = output.scaled.beltran[,comp.x]))+geom_boxplot(lwd=1.25,outlier.color=NA,aes(color=factor(type)))+  
     geom_jitter(shape=19,width=0.1,aes(color=factor(type),size=size_n))+theme_bw()+
-    theme(axis.text=element_text(size=30,face="bold",angle=90),axis.title=element_text(size=30,face="bold"),legend.position="none",
+    theme(axis.text=element_text(size=30,face="bold",angle=90,hjust=1),axis.title=element_text(size=30,face="bold"),legend.position="none",
           panel.border = element_rect(colour = "black", fill=NA, size=2))+
     scale_color_manual(values =  c(col_vector[1:2],"black"))+ labs(x="",y="Neuroendocrine Score")+scale_x_discrete(labels=c("NEPC","CRPC-Adeno"))+coord_cartesian(ylim = c(-5, 10)) 
-  plot2=ggplot(data=output.scaled.george,aes(x = factor(type,levels=c("SCLC","NSCLC")), y = output.scaled.george[,comp.x]))+geom_boxplot(lwd=1.25,outlier.color=NA,aes(color=factor(type)))+ 
+  plot2=ggplot(data=output.scaled.george,aes(x = factor(type,levels=c("SCLC","LUAD")), y = output.scaled.george[,comp.x]))+geom_boxplot(lwd=1.25,outlier.color=NA,aes(color=factor(type)))+ 
     geom_jitter(width=0.1,aes(color=factor(type),size=size_n))+theme_bw()+
-    theme(axis.text=element_text(size=30,face="bold",angle=90),axis.title=element_text(size=30,face="bold"),legend.position="none",
+    theme(axis.text=element_text(size=30,face="bold",angle=90,hjust=1),axis.title=element_text(size=30,face="bold"),legend.position="none",
           panel.border = element_rect(colour = "black", fill=NA, size=2))+
     scale_color_manual(values =  col_vector[3:4])+ labs(x="",y=element_blank()) +coord_cartesian(ylim = c(-5, 10))+
-    scale_x_discrete(labels=c("SCLC","NSCLC"))
+    scale_x_discrete(labels=c("SCLC","LUAD"))
   plot3=ggplot(data=output.scaled.tcga,aes(x = factor(type,levels=bymax), y = output.scaled.tcga[,comp.x]))+geom_boxplot(lwd=1.25,outlier.color=NA,aes(color=factor(type)))+  geom_jitter(width=0.1,aes(color=factor(type),size=size_n))+
-    theme_bw()+theme(axis.text=element_text(size=28,face="bold",angle=90),axis.title=element_text(size=30,face="bold"),legend.position="none",,panel.border = element_rect(colour = "black", fill=NA, size=2))+
+    theme_bw()+theme(axis.text=element_text(size=28,face="bold",angle=90,hjust=1),axis.title=element_text(size=30,face="bold"),legend.position="none",,panel.border = element_rect(colour = "black", fill=NA, size=2))+
     scale_color_manual(values =  col_vector[-c(1:4)])+ labs(x="Cancer",y=element_blank()) +coord_cartesian(ylim = c(-5, 10)) 
   plot4=ggplot(data=output.scaled.tcga,aes(x = factor(type,levels=by.top.3), y = output.scaled.tcga[,comp.x]))+geom_boxplot(lwd=1.25,outlier.color=NA,aes(color=factor(type)))+  geom_jitter(width=0.1,aes(color=factor(type),size=size_n))+
-    theme_bw()+theme(axis.text=element_text(size=28,face="bold",angle=90),axis.title=element_text(size=30,face="bold"),legend.position="none",,panel.border = element_rect(colour = "black", fill=NA, size=2))+
+    theme_bw()+theme(axis.text=element_text(size=28,face="bold",angle=90,hjust=1),axis.title=element_text(size=30,face="bold"),legend.position="none",,panel.border = element_rect(colour = "black", fill=NA, size=2))+
     scale_color_manual(values =  col_vector[-c(1:4)])+ labs(x="Cancer",y=element_blank()) +coord_cartesian(ylim = c(-5, 10)) 
   
   png(paste0(output_folder,"TCGA_zscore_with_color_bymax.png"),width=2000,height=900)
@@ -134,12 +130,12 @@ do_full_boxplot_RNA=function(file_pattern,tcga_location,crpc_file,nepc_file,sclc
     theme(axis.text=element_text(size=30,face="bold",angle=90),axis.title=element_text(size=30,face="bold"),legend.position="none",
           panel.border = element_rect(colour = "black", fill=NA, size=2))+
     scale_color_manual(values =  c(col_vector[1:2],"black"))+ labs(x="",y="Neuroendocrine Score")+scale_x_discrete(labels=c("NEPC","CRPC-Adeno"))+coord_cartesian(ylim = c(-5, 10)) 
-  plot2=ggplot(data=output.scaled.george,aes(x = factor(type,levels=c("SCLC","NSCLC")), y = output.scaled.george[,comp.x]))+geom_boxplot(lwd=1.25,outlier.color=NA,aes(color=factor(type)))+ 
+  plot2=ggplot(data=output.scaled.george,aes(x = factor(type,levels=c("SCLC","LUAD")), y = output.scaled.george[,comp.x]))+geom_boxplot(lwd=1.25,outlier.color=NA,aes(color=factor(type)))+ 
     geom_jitter(width=0.1,aes(color=factor(type)),size=size_n)+theme_bw()+
     theme(axis.text=element_text(size=30,face="bold",angle=90),axis.title=element_text(size=30,face="bold"),legend.position="none",
           panel.border = element_rect(colour = "black", fill=NA, size=2))+
     scale_color_manual(values =  col_vector[3:4])+ labs(x="",y=element_blank()) +coord_cartesian(ylim = c(-5, 10))+
-    scale_x_discrete(labels=c("SCLC","NSCLC"))
+    scale_x_discrete(labels=c("SCLC","LUAD"))
   plot3=ggplot(data=output.scaled.tcga.epithelial,aes(x = factor(type,levels=bymax.scaled.tcga.epithelial), y = output.scaled.tcga.epithelial[,comp.x]))+geom_boxplot(lwd=1.25,outlier.color=NA,aes(color=factor(type)))+  geom_jitter(width=0.1,aes(color=factor(type)),size=size_n)+
     theme_bw()+theme(axis.text=element_text(size=28,face="bold",angle=90),axis.title=element_text(size=30,face="bold"),legend.position="none",,panel.border = element_rect(colour = "black", fill=NA, size=2))+
     scale_color_manual(values =  col_vector[-c(1:4)])+ labs(x="Cancer",y=element_blank()) +coord_cartesian(ylim = c(-5, 10)) 
@@ -175,12 +171,12 @@ do_full_boxplot_RNA=function(file_pattern,tcga_location,crpc_file,nepc_file,sclc
     theme(axis.text=element_text(size=30,face="bold",angle=90),axis.title=element_text(size=30,face="bold"),legend.position="none",
           panel.border = element_rect(colour = "black", fill=NA, size=2))+
     scale_color_manual(values =  c(col_vector[1:2],"black"))+ labs(x="",y="Neuroendocrine Score")+scale_x_discrete(labels=c("NEPC","CRPC-Adeno"))
-  plot2=ggplot(data=output.george,aes(x = factor(type,levels=c("SCLC","NSCLC")), y = output.george[,comp.x]))+geom_boxplot(lwd=1.25,outlier.color=NA,aes(color=factor(type)))+ 
+  plot2=ggplot(data=output.george,aes(x = factor(type,levels=c("SCLC","LUAD")), y = output.george[,comp.x]))+geom_boxplot(lwd=1.25,outlier.color=NA,aes(color=factor(type)))+ 
     geom_jitter(width=0.1,aes(color=factor(type)))+theme_bw()+
     theme(axis.text=element_text(size=30,face="bold",angle=90),axis.title=element_text(size=30,face="bold"),legend.position="none",
           panel.border = element_rect(colour = "black", fill=NA, size=2))+
     scale_color_manual(values =  col_vector[3:4])+ labs(x="",y=element_blank()) +
-    scale_x_discrete(labels=c("SCLC","NSCLC"))
+    scale_x_discrete(labels=c("SCLC","LUAD"))
   plot3=ggplot(data=output.tcga,aes(x = factor(type,levels=bymax.notscaled), y = output.tcga[,comp.x]))+geom_boxplot(lwd=1.25,outlier.color=NA,aes(color=factor(type)))+  geom_jitter(width=0.1,aes(color=factor(type)))+
     theme_bw()+theme(axis.text=element_text(size=28,face="bold",angle=90),axis.title=element_text(size=30,face="bold"),legend.position="none",,panel.border = element_rect(colour = "black", fill=NA, size=2))+
     scale_color_manual(values =  col_vector[-c(1:4)])+ labs(x="Cancer",y=element_blank()) 

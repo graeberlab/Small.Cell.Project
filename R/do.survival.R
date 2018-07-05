@@ -86,7 +86,7 @@ do.survival=function(threshold=0,pattern,path,output_folder,component= 'comp.1',
     divide_by_avg<- function(x){ x/mean(x)}
     #surv.anno=read.delim("//10.47.223.100/data2/users/nbalanis/SmallCell/Annotation/pancancer.allcancers.censoring.table.txt")
     surv.anno$patientID=make.names(surv.anno$patientID)
-    NE.surv.frame.discrete=inner_join(output.surv.discrete,surv.anno,by=c("sample"="patientID"))
+    NE.surv.frame.discrete=inner_join(output.surv.discrete,surv.anno,by=c("Sample"="patientID"))
     NE.surv.frame.discrete$type=NE.surv.frame.discrete$type.x
     NE.surv.frame.discrete.OS=NE.surv.frame.discrete %>% dplyr::select(sample,survival_time=OS,censoring_status=OS_IND,type,prediction) %>% na.omit(.)
     NE.surv.frame.discrete.OS.normalized=NE.surv.frame.discrete.OS %>% group_by(type) %>% mutate(survival_time=divide_by_avg(survival_time))

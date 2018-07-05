@@ -80,10 +80,10 @@ pval_graph<-function(input_folder,output_folder){
   my.levels=stuff$sample
   h=ggplot(data=stuff, aes(x=factor(sample,levels = my.levels), y=pval_vector, fill=factor(sample,levels = my.levels)))+
     geom_bar(color="black",stat="identity")+ 
-    theme(axis.text.x= element_text(size=7))+
+    theme(axis.text.x= element_text(size=16),axis.title.x=element_text(size=16),legend.position="none")+
     geom_hline(yintercept=1.3,color="red",size=1.5,linetype="dotted")+ylab("Continuous P-value")+
     geom_hline(yintercept=-1.3,color="red",size=1.5,linetype="dotted")+
-    guides(fill=guide_legend(title="Cancer Type"))
+    guides(fill=guide_legend(title="Cancer Type"))+ggpubr::rotate_x_text(55)
   
   ggsave(filename = paste0(output_folder,"pancan.continuous.barchart.pval_graph.png"),plot=h,dpi=300,w=11,h=6)
   
