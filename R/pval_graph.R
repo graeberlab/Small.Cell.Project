@@ -60,8 +60,8 @@ pval_graph<-function(input_folder,output_folder){
   }
   
   
-  all.files.long.path=list.files(pattern="continuous",full.names=T,path = input_folder)
-  all.files.short.path=list.files(pattern="continuous",full.names=F,path = input_folder)
+  all.files.long.path=list.files(pattern="continuous.txt",full.names=T,path = input_folder)
+  all.files.short.path=list.files(pattern="continuous.txt",full.names=F,path = input_folder)
   all.names=sapply(all.files.short.path, function(x) strsplit(x,"_")[[1]][1])
   list_of_dataframes<-lapply(all.files.long.path, read.table,header=T,row.names=NULL,sep = '\t',check.names=F,stringsAsFactors = F,skip=6)
   
@@ -78,13 +78,27 @@ pval_graph<-function(input_folder,output_folder){
   stuff=stuff[order(stuff[,2],decreasing=T),]
   stuff=rbind(stuff[!stuff$sample %in% "pancan",] , stuff[stuff$sample %in% "pancan",] )
   my.levels=stuff$sample
-  h=ggplot(data=stuff, aes(x=factor(sample,levels = my.levels), y=pval_vector, fill=factor(sample,levels = my.levels)))+
-    geom_bar(color="black",stat="identity")+ 
-    theme(axis.text.x= element_text(size=16),axis.title.x=element_text(size=16),legend.position="none")+
-    geom_hline(yintercept=1.3,color="red",size=1.5,linetype="dotted")+ylab("Continuous P-value")+
-    geom_hline(yintercept=-1.3,color="red",size=1.5,linetype="dotted")+
-    guides(fill=guide_legend(title="Cancer Type"))+ggpubr::rotate_x_text(55)
+  stuff1= stuff[stuff$sample == "pancan",]
+  stuff2= stuff[stuff$sample != "pancan",]
   
-  ggsave(filename = paste0(output_folder,"pancan.continuous.barchart.pval_graph.png"),plot=h,dpi=300,w=11,h=6)
+  h=ggplot(data=stuff2, aes(x=factor(sample,levels = my.levels), y=pval_vector, fill=factor(sample,levels = my.levels)))+
+    geom_bar(color="black",stat="identity")+ theme_bw()+
+    theme(panel.border = element_rect(colour = "black", fill = NA, size = 1),axis.text.x= element_text(size=18),axis.text.y= element_text(size=20),axis.title.y=element_text(size=20),axis.title.x=element_text(size=16),legend.position="none")+
+    geom_hline(yintercept=1.3,color="red",size=1.5,linetype="dotted")+ylab("P-value")+
+    geom_hline(yintercept=-1.3,color="red",size=1.5,linetype="dotted")+
+    guides(fill=guide_legend(title="Cancer Type"))+ggpubr::rotate_x_text(55)+
+    xlab("Cancer")+ylim(c(-5,12))
+  
+  i=ggplot(data=stuff1, aes(x=factor(sample,levels = my.levels), y=pval_vector, fill=factor(sample,levels = my.levels)))+
+    geom_bar(color="black",stat="identity")+ theme_bw()+
+    theme(panel.border = element_rect(colour = "black", fill = NA, size = 1),axis.text.x= element_text(size=18),axis.text.y= element_text(size=20),axis.title.y=element_text(size=16),axis.title.x=element_text(size=16),legend.position="none")+
+    geom_hline(yintercept=1.3,color="red",size=1.5,linetype="dotted")+ylab("")+
+    geom_hline(yintercept=-1.3,color="red",size=1.5,linetype="dotted")+
+    guides(fill=guide_legend(title="Cancer Type"))+ggpubr::rotate_x_text(55)+
+    xlab("")+ylim(c(-5,12))
+  
+  j= ggarrange(plotlist = list(h,i),widths = c(14/16,2/16),heights=c(8,8),ncol=2,align="h")
+  
+  ggsave(filename = paste0(output_folder,"pancan.continuous.barchart.pval_graph.png"),plot=j,dpi=300,w=9,h=5)
   
 }
