@@ -8,10 +8,10 @@ PLSR_from_file_and_predict_second_dataset(file, file2, sample.names,
   sample.type, y.response, train_string, test_string, title = "PLSR",
   comp.x = "comp.1", comp.y = "comp.2", comps = 2, labels = F,
   saveplot = T, savetype = ".png", w = 8, h = 6,
-  legendname = "default", scale = F, plot_both = T, colpalette = NULL,
-  shape.palette = NULL, ellipses = T, conf = 0.9, varimax = F,
-  varimax.comp = 2, output_folder = "./", TCGA = F, threshold = 3,
-  do.legend = T)
+  legendname = "default", scale = F, plot_both = T,
+  colpalette = NULL, shape.palette = NULL, ellipses = T,
+  conf = 0.9, varimax = F, varimax.comp = 2, output_folder = "./",
+  TCGA = F, threshold = 3, do.legend = T)
 }
 \arguments{
 \item{file}{file for X matirx}

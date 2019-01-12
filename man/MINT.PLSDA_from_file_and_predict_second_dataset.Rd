@@ -10,10 +10,10 @@ MINT.PLSDA_from_file_and_predict_second_dataset(..., file2, study.names,
   sample.type2 = NULL, train_string, test_string, title = "PLSR",
   comp.x = "comp.1", comp.y = "comp.2", comps = 2, labels = F,
   saveplot = T, savetype = ".png", w = 8, h = 6,
-  legendname = "default", scale = F, plot_both = T, colpalette = NULL,
-  shape.palette = NULL, ellipses = T, conf = 0.9, varimax = F,
-  varimax.comp = 2, threshold = 3, output_folder = "./", TCGA = F,
-  study.train.names, study.test.names)
+  legendname = "default", scale = F, plot_both = T,
+  colpalette = NULL, shape.palette = NULL, ellipses = T,
+  conf = 0.9, varimax = F, varimax.comp = 2, threshold = 3,
+  output_folder = "./", TCGA = F, study.train.names, study.test.names)
 }
 \arguments{
 \item{file2}{file for test data matrix}

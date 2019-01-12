@@ -5,8 +5,8 @@
 \alias{intersect_doPCA_from_file_and_project_second_dataset}
 \title{PCA from file and project second dataset}
 \usage{
-intersect_doPCA_from_file_and_project_second_dataset(file, file2, train_string,
-  center = TRUE, scale = FALSE)
+intersect_doPCA_from_file_and_project_second_dataset(file, file2,
+  train_string, center = TRUE, scale = FALSE)
 }
 \arguments{
 \item{file}{Filepath/filename of data matrix with no row numbering. Data file to do PCA on.}

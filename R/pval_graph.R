@@ -81,23 +81,32 @@ pval_graph<-function(input_folder,output_folder){
   stuff1= stuff[stuff$sample == "pancan",]
   stuff2= stuff[stuff$sample != "pancan",]
   
+  
+  col_vector=c("brown","darkorange1","maroon3","purple4","purple2","#B79F00","deepskyblue","skyblue","springgreen3","magenta1",
+               "#9590FF","#556B2F","indianred3","cornflowerblue","limegreen","darkblue","burlywood1","rosybrown3","red3","darkseagreen2","darkviolet","dodgerblue1")
+  
+  
+  
   h=ggplot(data=stuff2, aes(x=factor(sample,levels = my.levels), y=pval_vector, fill=factor(sample,levels = my.levels)))+
     geom_bar(color="black",stat="identity")+ theme_bw()+
     theme(panel.border = element_rect(colour = "black", fill = NA, size = 1),axis.text.x= element_text(size=18),axis.text.y= element_text(size=20),axis.title.y=element_text(size=20),axis.title.x=element_text(size=16),legend.position="none")+
     geom_hline(yintercept=1.3,color="red",size=1.5,linetype="dotted")+ylab("P-value")+
     geom_hline(yintercept=-1.3,color="red",size=1.5,linetype="dotted")+
     guides(fill=guide_legend(title="Cancer Type"))+ggpubr::rotate_x_text(55)+
-    xlab("Cancer")+ylim(c(-5,12))
+    xlab("Cancer")+ylim(c(-5,12))+scale_fill_manual(values =  col_vector)
   
+  
+  
+
   i=ggplot(data=stuff1, aes(x=factor(sample,levels = my.levels), y=pval_vector, fill=factor(sample,levels = my.levels)))+
     geom_bar(color="black",stat="identity")+ theme_bw()+
     theme(panel.border = element_rect(colour = "black", fill = NA, size = 1),axis.text.x= element_text(size=18),axis.text.y= element_text(size=20),axis.title.y=element_text(size=16),axis.title.x=element_text(size=16),legend.position="none")+
     geom_hline(yintercept=1.3,color="red",size=1.5,linetype="dotted")+ylab("")+
     geom_hline(yintercept=-1.3,color="red",size=1.5,linetype="dotted")+
     guides(fill=guide_legend(title="Cancer Type"))+ggpubr::rotate_x_text(55)+
-    xlab("")+ylim(c(-5,12))
+    xlab("")+ylim(c(-5,12))+scale_color_manual(values =  col_vector[length(col_vector)])
   
-  j= ggarrange(plotlist = list(h,i),widths = c(14/16,2/16),heights=c(8,8),ncol=2,align="h")
+  j= ggarrange(plots = list(h,i),widths = c(14/16,2/16),heights=c(8,8),ncol=2,align="h")
   
   ggsave(filename = paste0(output_folder,"pancan.continuous.barchart.pval_graph.png"),plot=j,dpi=300,w=9,h=5)
   

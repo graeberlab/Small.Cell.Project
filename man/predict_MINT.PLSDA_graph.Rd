@@ -6,8 +6,8 @@
 Predicts classifications of test dataset and writes out predictions}
 \usage{
 predict_MINT.PLSDA_graph(..., test_files_folder, anno.file,
-  output_folder = "./", train_string = "", test_pattern = "", comps = 3,
-  study.train.names, y.response)
+  output_folder = "./", train_string = "", test_pattern = "",
+  comps = 3, study.train.names, y.response)
 }
 \arguments{
 \item{test_files_folder}{folder of test files}

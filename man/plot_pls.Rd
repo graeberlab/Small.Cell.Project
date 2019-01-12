@@ -6,8 +6,8 @@
 \usage{
 plot_pls(file, info.name, info.type, title = "", labels = TRUE,
   PCx = "comp.1", PCy = "comp.2", ellipse = F, conf = 0.95,
-  saveplot = F, savename = "default", savetype = ".pdf", w = 8, h = 6,
-  legendname = "type", colpalette = NULL)
+  saveplot = F, savename = "default", savetype = ".pdf", w = 8,
+  h = 6, legendname = "type", colpalette = NULL)
 }
 \arguments{
 \item{file}{File containing scores matrix}

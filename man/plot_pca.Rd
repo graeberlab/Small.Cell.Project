@@ -5,10 +5,10 @@
 \title{Plot PCA}
 \usage{
 plot_pca(file, info.name, info.type, title = "", labels = TRUE,
-  label_file = NULL, label_name, PCx = "PC1", PCy = "PC2", ellipses = F,
-  conf = 0.95, point_size = 3, savename = "example", saveplot = F,
-  savetype = ".png", w = 8, h = 6, label_size = 3, colpalette = NULL,
-  shape.palette = NULL, legendname = "default")
+  label_file = NULL, label_name, PCx = "PC1", PCy = "PC2",
+  ellipses = F, conf = 0.95, point_size = 3, savename = "example",
+  saveplot = F, savetype = ".png", w = 8, h = 6, label_size = 3,
+  colpalette = NULL, shape.palette = NULL, legendname = "default")
 }
 \arguments{
 \item{file}{File containing scores matrix}

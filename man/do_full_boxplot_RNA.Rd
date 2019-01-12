@@ -2,7 +2,6 @@
 % Please edit documentation in R/do_full_boxplot.R, R/do_full_boxplot_RNA.R
 \name{do_full_boxplot_RNA}
 \alias{do_full_boxplot_RNA}
-\alias{do_full_boxplot_RNA}
 \title{create tcga boxplots}
 \usage{
 do_full_boxplot_RNA(file_pattern, tcga_location, crpc_file, nepc_file,

@@ -5,9 +5,9 @@
 \title{create RRHO file after intersecting}
 \usage{
 create_RRHO_file_intersect_then_rank(metric_file1, metric_file2,
-  outfile.prefix = paste0("rankrank.", metric_file1, "_vs_", metric_file2),
-  metric.col.file1 = 2, metric.col.file2 = 2, rank1 = "desc",
-  rank2 = "desc")
+  outfile.prefix = paste0("rankrank.", metric_file1, "_vs_",
+  metric_file2), metric.col.file1 = 2, metric.col.file2 = 2,
+  rank1 = "desc", rank2 = "desc")
 }
 \arguments{
 \item{metric_file1}{filepath of first metric file. usually 2 columns. should have no headers. first column is gene name. second column is metric. does not need to be sorted}

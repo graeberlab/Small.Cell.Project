@@ -4,8 +4,8 @@
 \alias{pick.samples}
 \title{Pick samples}
 \usage{
-pick.samples(data.file, max.features = 5, anno.file, train.method = "LOOCV",
-  technique = "lda")
+pick.samples(data.file, max.features = 5, anno.file,
+  train.method = "LOOCV", technique = "lda")
 }
 \arguments{
 \item{data.file}{Filepath/filename of data matrix}
