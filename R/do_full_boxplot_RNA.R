@@ -86,7 +86,7 @@ do_full_boxplot_RNA=function(file_pattern,tcga_location,crpc_file,nepc_file,sclc
                "red3","purple2","darkblue","limegreen","deepskyblue","darkviolet","purple4","burlywood1","magenta1","maroon3","indianred3",
                "cornflowerblue","darkorange1","darkseagreen2","dodgerblue1","firebrick2","cadetblue3","purple2","blue1","chocolate",
                "darkslategray1","aquamarine","palevioletred","chartreuse2","forestgreen","orange3","darkolivegreen2","mediumpurple4","gold","indianred2","springgreen1","darkorange3","coral4")
-  col_vector1 = c("#F8766D","#00BFC4","black")
+  col_vector1 = c("#F8766D","#00BFC4","black")  #NEPC CRPC
   col_vector2 = c("#B79F00","#F564E3","black")
   col_vector3=c("#556B2F","springgreen3","steelblue1","skyblue","brown","#9590FF","rosybrown3",
                 "red3","purple2","darkblue","limegreen","deepskyblue","darkviolet","purple4","burlywood1","magenta1","maroon3","indianred3",
@@ -96,6 +96,17 @@ do_full_boxplot_RNA=function(file_pattern,tcga_location,crpc_file,nepc_file,sclc
   
   #colpalette.final <- c("PRAD.norm"="#619CFF", "LUAD.norm"="#00BA38", "NEPC"="#00BFC4", "SCLC"="#F564E3", 
   #                "CRPC"="#F8766D", "LUAD"="#B79F00", "PRAD"="#9590FF", "BLCA.norm"="#DC143C", "BLCA"="#556B2F", "BLCA.SCN"="#A52A2A")
+  col_vector4=c("LUAD"="#B79F00", "BLCA"="#556B2F","BRCA" ="springgreen3","PAAD"="steelblue1","THCA"="skyblue","KIRC"="brown",
+                "PRAD"="#9590FF","STAD"="rosybrown3","HNSC"="red3","LIHC"="purple2","CESC"="darkblue",
+                "COADREAD"="limegreen","UCEC"="deepskyblue","LUSC"="darkviolet","KIRP"="purple4",
+                "OV"="burlywood1","ESCA"="magenta1","KICH"="maroon3","UCS"="indianred3",
+                "CHOL"="cornflowerblue","ACC"="darkorange1","NBL.TARGET"="darkseagreen2","WT.TARGET"="dodgerblue1",
+                "ALL.TARGET"="firebrick2","LGG"="cadetblue3","PCPG"="purple2","TGCT"="blue1","GBM"="chocolate",
+                "LAML"="darkslategray1","DLBC"="aquamarine","THYM"="palevioletred","SKCM"="chartreuse2",
+                "UVM"="forestgreen","SARC"="orange3","MESO"="darkolivegreen2","AML.TARGET"="mediumpurple4",
+                "AMLIF.TARGET"="gold","indianred2","ACC"="springgreen1","darkorange3","coral4")
+  
+  
   
   set.seed(79)
   library(egg)
@@ -150,21 +161,31 @@ do_full_boxplot_RNA=function(file_pattern,tcga_location,crpc_file,nepc_file,sclc
     geom_jitter(shape=19,width=0.1,aes(color=factor(type),size=size_n))+theme_bw()+
     theme(axis.text=element_text(size=36,face="bold",angle=90),axis.title=element_text(size=30,face="bold"),legend.position="none",
           panel.border = element_rect(colour = "black", fill=NA, size=2))+
-    scale_color_manual(values =  c(col_vector1,"black"))+ labs(x="",y="Neuroendocrine Score")+scale_x_discrete(labels=c("NEPC","CRPC-Adeno"))+coord_cartesian(ylim = c(-5, 10)) 
+    scale_color_manual(values =  c(col_vector1,"black"))+ labs(x="",y="Neuroendocrine Score")+
+    scale_x_discrete(labels=c("NEPC","CRPC-Adeno"))+coord_cartesian(ylim = c(-5, 10))+
+    ggpubr::rotate_x_text(65) 
+  
+  
   plot2=ggplot(data=output.scaled.george,aes(x = factor(type,levels=c("SCLC","LUAD")), y = output.scaled.george[,comp.x]))+geom_boxplot(lwd=1.25,outlier.color=NA,aes(color=factor(type)))+ 
     geom_jitter(width=0.1,aes(color=factor(type),size=size_n))+theme_bw()+
     theme(axis.text=element_text(size=36,face="bold",angle=90),axis.title=element_text(size=30,face="bold"),legend.position="none",
           panel.border = element_rect(colour = "black", fill=NA, size=2))+
     scale_color_manual(values =  col_vector2)+ labs(x="",y=element_blank()) +coord_cartesian(ylim = c(-5, 10))+
-    scale_x_discrete(labels=c("SCLC","LUAD"))
+    scale_x_discrete(labels=c("SCLC","LUAD"))+
+    ggpubr::rotate_x_text(65)
+  
   plot3=ggplot(data=output.scaled.tcga.epithelial,aes(x = factor(type,levels=bymax.scaled.tcga.epithelial), y = output.scaled.tcga.epithelial[,comp.x]))+geom_boxplot(lwd=1.25,outlier.color=NA,aes(color=factor(type)))+  
     geom_jitter(width=0.1,aes(color=factor(type),size=size_n))+
     theme_bw()+theme(axis.text=element_text(size=36,face="bold",angle=90),axis.title=element_text(size=30,face="bold"),legend.position="none",,panel.border = element_rect(colour = "black", fill=NA, size=2))+
-    scale_color_manual(values =  col_vector[-c(1:4)])+ labs(x="Cancer",y=element_blank()) +coord_cartesian(ylim = c(-5, 10)) 
+    scale_color_manual(values =  col_vector[-c(1:4)])+ 
+    labs(x="Cancer",y=element_blank()) +coord_cartesian(ylim = c(-5, 10)) +
+    ggpubr::rotate_x_text(65)
+  
   plot4=ggplot(data=output.scaled.tcga.epithelial,aes(x = factor(type,levels=by.top.3.scale.tcga.epithelial), y = output.scaled.tcga.epithelial[,comp.x]))+geom_boxplot(lwd=1.25,outlier.color=NA,aes(color=factor(type)))+  
     geom_jitter(width=0.1,aes(color=factor(type),size=size_n))+
     theme_bw()+theme(axis.text=element_text(size=36,face="bold",angle=90),axis.title=element_text(size=30,face="bold"),legend.position="none",,panel.border = element_rect(colour = "black", fill=NA, size=2))+
-    scale_color_manual(values =  col_vector3)+ labs(x="Cancer",y=element_blank()) +coord_cartesian(ylim = c(-5, 10)) 
+    scale_color_manual(values =  col_vector3)+ labs(x="Cancer",y=element_blank()) +coord_cartesian(ylim = c(-5, 10)) +
+    ggpubr::rotate_x_text(65)
   
   png(paste0(output_folder,"TCGA_epithelial_zscore_with_color_bymax.png"),width=2000,height=900)
   ggarrange(plot1,plot2, plot3, widths = c(1/12,1/12, 10/12),ncol=3)
@@ -191,27 +212,51 @@ do_full_boxplot_RNA=function(file_pattern,tcga_location,crpc_file,nepc_file,sclc
   
   plot1=ggplot(data=output.beltran,aes(x = factor(type,levels=c("NEPC","CRPC")), y = output.beltran[,comp.x]))+geom_boxplot(lwd=1.25,outlier.color=NA,aes(color=factor(type)))+  
     geom_jitter(shape=19,width=0.1,aes(color=factor(type)))+theme_bw()+
-    theme(axis.text=element_text(size=36,face="bold",angle=90,hjust=1),axis.title=element_text(size=30,face="bold"),legend.position="none",
-          panel.border = element_rect(colour = "black", fill=NA, size=2))+
-    scale_color_manual(values =  c(col_vector[1:2],"black"))+ labs(x="",y="Small Cell Neuroendocrine\n(SCN)Score")+scale_x_discrete(labels=c("NEPC","CRPC-Adeno"))
+    theme(axis.text.y=element_text(size=30,face="bold",angle=90,hjust=1),
+          axis.text.x=element_text(size=30,face="bold",angle=90,hjust=0.5),
+          axis.title.y=element_text(size=48,face="bold",vjust=12,margin = margin(l=40),hjust=0.5),
+          legend.position="none", panel.border = element_rect(colour = "black", fill=NA, size=2))+
+    scale_color_manual(values =  col_vector1)+ labs(x="",y="Small Cell Neuroendocrine\n(SCN)Score")+
+    scale_x_discrete(labels=c("NEPC","CRPC-Adeno"))
+  
   plot2=ggplot(data=output.george,aes(x = factor(type,levels=c("SCLC","LUAD")), y = output.george[,comp.x]))+geom_boxplot(lwd=1.25,outlier.color=NA,aes(color=factor(type)))+ 
     geom_jitter(width=0.1,aes(color=factor(type)))+theme_bw()+
-    theme(axis.text=element_text(size=36,face="bold",angle=90,hjust=1),axis.title=element_text(size=30,face="bold"),legend.position="none",
+    theme(axis.text.y=element_text(size=30,face="bold",angle=90,hjust=1),
+          axis.text.x=element_text(size=30,face="bold",angle=90,hjust=0.5),
+          axis.title=element_text(size=30,face="bold"),legend.position="none",
           panel.border = element_rect(colour = "black", fill=NA, size=2))+
-    scale_color_manual(values =  col_vector[3:4])+ labs(x="",y=element_blank()) +
+    scale_color_manual(values =  col_vector2)+ labs(x="",y=element_blank()) +
     scale_x_discrete(labels=c("SCLC","LUAD"))
-  plot3=ggplot(data=output.tcga,aes(x = factor(type,levels=bymax.notscaled), y = output.tcga[,comp.x]))+geom_boxplot(lwd=1.25,outlier.color=NA,aes(color=factor(type)))+  geom_jitter(width=0.1,aes(color=factor(type)))+
-    theme_bw()+theme(axis.text=element_text(size=36,face="bold",angle=90,hjust=1),axis.title=element_text(size=30,face="bold"),legend.position="none",,panel.border = element_rect(colour = "black", fill=NA, size=2))+
-    scale_color_manual(values =  col_vector[-c(1:4)])+ labs(x="Cancer",y=element_blank()) 
-  plot4=ggplot(data=output.tcga,aes(x = factor(type,levels=by.avg.noz.all), y = output.tcga[,comp.x]))+geom_boxplot(lwd=1.25,outlier.color=NA,aes(color=factor(type)))+  geom_jitter(width=0.1,aes(color=factor(type)))+
-    theme_bw()+theme(axis.text=element_text(size=36,face="bold",angle=90,hjust=1),axis.title=element_text(size=30,face="bold"),legend.position="none",,panel.border = element_rect(colour = "black", fill=NA, size=2))+
-    scale_color_manual(values =  col_vector[-c(1:4)])+ labs(x="Cancer",y=element_blank()) 
   
+  plot3=ggplot(data=output.tcga,aes(x = factor(type,levels=bymax.notscaled), y = output.tcga[,comp.x]))+geom_boxplot(lwd=1.25,outlier.color=NA,aes(color=factor(type)))+  geom_jitter(width=0.1,aes(color=factor(type)))+
+    theme_bw()+theme(axis.text=element_text(size=30,face="bold",angle=90,hjust=1),
+                     axis.text.x=element_text(size=30,face="bold",angle=90,hjust=0.5),
+                     axis.title=element_text(size=34,face="bold"),
+                     legend.position="none",panel.border = element_rect(colour = "black", fill=NA, size=2))+
+    scale_color_manual(values =  col_vector3)+ labs(x="Cancer",y=element_blank()) 
+ 
+  
+  output.tcga4= output.tcga
+  output.tcga4$type=factor(x=output.tcga4$type,levels=by.avg.noz.all)
+  output.tcga4=output.tcga4[order(output.tcga4$type),]
+  
+  
+   plot4=ggplot(data=output.tcga4,aes(x = factor(type,levels=by.avg.noz.all), y = output.tcga4[,comp.x]))+
+     geom_boxplot(lwd=1.25,outlier.color=NA,aes(color=factor(type)))+
+     geom_jitter(width=0.1,aes(color=factor(type)))+theme_bw()+
+     theme(axis.text.y=element_text(size=32,face="bold",angle=90,hjust=1),
+           axis.text.x=element_text(size=32,face="bold",angle=90,vjust=0.5,hjust=1),
+           axis.title=element_text(size=34,face="bold"),legend.position="none",
+           panel.border = element_rect(colour = "black", fill=NA, size=2))+
+    scale_color_manual(values =  col_vector4)+ labs(x="Cancer",y=element_blank()) 
   
   png(paste0(output_folder,"TCGA_no_zscore_with_color_bymax.png"),width=10.75,height=3.5,units = "in",res = 600)
-  ggarrange(plot1,plot2, plot3, widths = c(1/12,1/12, 10/12),ncol=3,align="h")
+  ggarrange(plots=list(plot1,plot2, plot3), widths = c(1/12,1/12, 10/12),ncol=3,align="h")
   dev.off()
-  png(paste0(output_folder,"TCGA_no_zscore_with_color_byavg.png"),width=2000,height=900)
-  ggarrange(plot1,plot2, plot4, widths = c(1/12,1/12, 10/12),ncol=3,align="h")
+  png(paste0(output_folder,"TCGA_no_zscore_with_color_byavg.png"),width=1950,height=900)
+  ggarrange(plots=list(plot1,plot2, plot4), widths = c(1/12,1/12, 10/12),ncol=3,align="h")
   dev.off()
+  
+  
+  
 }
