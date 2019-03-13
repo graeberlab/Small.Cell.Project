@@ -41,9 +41,10 @@ do_full_boxplot_RNA=function(file_pattern,tcga_location,crpc_file,nepc_file,sclc
   output.beltran=rbind(nepc,crpc)
   output.scaled.beltran$size_n=ifelse(output.scaled.beltran[,comp.x] >=threshold,5,3 )
   # output.beltran$size_n=ifelse(output.beltran[,comp.x] >=threshold,5,3 )
-  
-  lung=rbind(list_of_dataframes[["LUAD"]],list_of_dataframes[["LUSC"]])
-  lung$type="LUAD"
+  #luad=read.table("//10.47.223.100/data2/users/nbalanis/SmallCell/1_RNA/TCGA_PLSR/PCA.arrow/LUAD_projected_onto_Multi.PCA_PCA_predicted.scores.txt",header=T,row.names=NULL,sep = '\t',check.names=F,stringsAsFactors = F)
+ 
+  lung=list_of_dataframes[["LUAD"]]
+  #lung$type="LUAD"
   lung.mean=mean(lung[,comp.x])
   lung.sd=sd(lung[,comp.x])
   lung.scaled=lung
@@ -63,8 +64,13 @@ do_full_boxplot_RNA=function(file_pattern,tcga_location,crpc_file,nepc_file,sclc
     colnames(blah)[[1]]="Sample"
     blah
   })
+  
+  
   output.tcga<-as.data.frame(rbindlist(list_of_dataframes))
   output.scaled.tcga<-as.data.frame(rbindlist(list_of_dataframes_scaled))
+  
+  output.tcga=output.tcga[output.tcga$type != "LUAD",]
+  output.scaled.tcga=output.scaled.tcga[output.scaled.tcga$type != "LUAD",]
   
   output.tcga.length=ncol(output.tcga)
   output.tcga=output.tcga[,c(1,2,ncol(output.tcga))]
